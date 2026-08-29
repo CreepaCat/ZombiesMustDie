@@ -2,9 +2,6 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
-# Recommended: add any editor/OS/tool-specific ignore rules from the Global/ templates as needed.
-# See: https://github.com/github/gitignore/tree/main/Global
-#
 .utmp/
 /[Ll]ibrary/
 /[Tt]emp/
@@ -46,7 +43,6 @@ ExportedObj/
 *.csproj
 *.unityproj
 *.sln
-*.slnx
 *.suo
 *.tmp
 *.user
@@ -58,7 +54,9 @@ ExportedObj/
 *.mdb
 *.opendb
 *.VC.db
-
+*.idea
+*.vscode
+*.slnx
 # Unity3D generated meta files
 *.pidb.meta
 *.pdb.meta
@@ -88,6 +86,8 @@ InitTestScene*.unity*
 /[Aa]ssets/StreamingAssets/aa*
 /[Aa]ssets/AddressableAssetsData/link.xml*
 /[Aa]ssets/Addressables_Temp*
+/[Aa]ssets/Plugins
+/[Aa]ssets/ArtRes
 # By default, Addressables content builds will generate addressables_content_state.bin
 # files in platform-specific subfolders, for example:
 # /Assets/AddressableAssetsData/OSX/addressables_content_state.bin
@@ -101,6 +101,3 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
-
-# Auto-generated cache in Assets folder
-/[Aa]ssets/[Ss]ceneDependencyCache*
