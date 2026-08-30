@@ -41,8 +41,8 @@ namespace ZombiesMustDie
             GameEntry.Event.Subscribe(LoadSceneDependencyAssetEventArgs.EventId, OnLoadSceneDependencyAsset);
 
             // 停止所有声音
-            // GameEntry.Sound.StopAllLoadingSounds();
-            // GameEntry.Sound.StopAllLoadedSounds();
+            GameEntry.Sound.StopAllLoadingSounds();
+            GameEntry.Sound.StopAllLoadedSounds();
 
             // 隐藏所有实体
             GameEntry.Entity.HideAllLoadingEntities();
@@ -93,12 +93,6 @@ namespace ZombiesMustDie
                 this
             );
 
-
-            // IDataTable<DRScene> dtScene = GameEntry.DataTable.GetDataTable<DRScene>();
-            // DRScene drScene = dtScene.GetDataRow(sceneId);
-
-            // GameEntry.Scene.LoadScene(AssetUtility.GetSceneAsset(drScene.AssetName), Constant.AssetPriority.SceneAsset, this);
-            // GameEntry.Scene.LoadScene(AssetUtility.GetSceneAsset(drScene.AssetName), 100, this);
             m_BackgroundMusicId = drScene.BackgroundMusicId;
         }
 
@@ -145,7 +139,8 @@ namespace ZombiesMustDie
 
             if (m_BackgroundMusicId > 0)
             {
-                // GameEntry.Sound.PlayMusic(m_BackgroundMusicId);
+                //播放背景音乐
+                GameEntry.Sound.PlayMusic(m_BackgroundMusicId);
             }
 
             m_IsChangeSceneComplete = true;

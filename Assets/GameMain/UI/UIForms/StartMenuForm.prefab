@@ -60,7 +60,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
   m_UseReflectionProbes: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -100,6 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc0b3c15b2a8e274583fab2984fa9d85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.StartMenuForm
+  m_QuitButton: {fileID: 1192940028682613659}
 --- !u!1 &6085721079640953556
 GameObject:
   m_ObjectHideFlags: 0
@@ -489,6 +490,34 @@ PrefabInstance:
       propertyPath: m_Name
       value: btnSettings
       objectReference: {fileID: 0}
+    - target: {fileID: 7241343899850848910, guid: 599843390d188da46a5e25111d79232c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7241343899850848910, guid: 599843390d188da46a5e25111d79232c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7241343899850848910, guid: 599843390d188da46a5e25111d79232c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5457015381081820479}
+    - target: {fileID: 7241343899850848910, guid: 599843390d188da46a5e25111d79232c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7241343899850848910, guid: 599843390d188da46a5e25111d79232c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnSettingButtonClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 7241343899850848910, guid: 599843390d188da46a5e25111d79232c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ZombiesMustDie.StartMenuForm, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7241343899850848910, guid: 599843390d188da46a5e25111d79232c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -600,6 +629,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 599843390d188da46a5e25111d79232c, type: 3}
+--- !u!1 &1192940028682613659 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4968219119907898250, guid: 599843390d188da46a5e25111d79232c, type: 3}
+  m_PrefabInstance: {fileID: 6087886297837514769}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &6508132299386754878 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1021476596615423791, guid: 599843390d188da46a5e25111d79232c, type: 3}

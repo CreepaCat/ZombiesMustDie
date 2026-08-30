@@ -1,5 +1,6 @@
 using GameFramework.Fsm;
 using GameFramework.Procedure;
+using UnityGameFramework.Runtime;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 
 namespace ZombiesMustDie
@@ -11,9 +12,8 @@ namespace ZombiesMustDie
             base.OnEnter(procedureOwner);
 
 
-            // 默认字典：加载默认字典文件 Assets/GameMain/Configs/DefaultDictionary.xml
-            // 此字典文件记录了资源更新前使用的各种语言的字符串，会随 App 一起发布，故不可更新
-            // GameEntry.BuiltinData.InitDefaultDictionary();
+            // 声音配置：根据用户配置数据，设置即将使用的声音选项
+            InitSoundSettings();
         }
 
         protected override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds, float realElapseSeconds)
@@ -27,6 +27,18 @@ namespace ZombiesMustDie
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
         {
             base.OnLeave(procedureOwner, isShutdown);
+        }
+
+        private void InitSoundSettings()
+        {
+            //todo:将字符串抽出 用一个静态类统一配置
+            GameEntry.Sound.Mute("Music", GameEntry.Setting.GetBool("Setting.MusicMuted", false));
+            GameEntry.Sound.SetVolume("Music", GameEntry.Setting.GetFloat("Setting.MusicVolume", 0.3f));
+            GameEntry.Sound.Mute("Sound", GameEntry.Setting.GetBool("Setting.SoundMuted", false));
+            GameEntry.Sound.SetVolume("Sound", GameEntry.Setting.GetFloat("Setting.SoundVolume", 1f));
+            // GameEntry.Sound.Mute("UISound", GameEntry.Setting.GetBool("Setting.UISoundMuted", false));
+            // GameEntry.Sound.SetVolume("UISound", GameEntry.Setting.GetFloat("Setting.UISoundVolume", 1f));
+            Log.Info("Init sound settings complete.");
         }
     }
 }

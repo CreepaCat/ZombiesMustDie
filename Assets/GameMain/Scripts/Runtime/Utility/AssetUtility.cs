@@ -31,12 +31,12 @@ namespace ZombiesMustDie
 
         public static string GetMusicAsset(string assetName)
         {
-            return Utility.Text.Format("Assets/GameMain/Music/{0}.mp3", assetName);
+            return Utility.Text.Format("Assets/GameMain/Audio/Music/{0}.mp3", assetName);
         }
 
         public static string GetSoundAsset(string assetName)
         {
-            return Utility.Text.Format("Assets/GameMain/Sounds/{0}.wav", assetName);
+            return Utility.Text.Format("Assets/GameMain/Audio/Sounds/{0}.wav", assetName);
         }
 
         public static string GetEntityAsset(string assetName)

@@ -9,6 +9,11 @@ namespace ZombiesMustDie
     {
         private bool m_StartGame = false;
         private StartMenuForm m_MenuForm = null;
+
+        public void StartGame()
+        {
+            m_StartGame = true;
+        }
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
             base.OnEnter(procedureOwner);
@@ -24,7 +29,7 @@ namespace ZombiesMustDie
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
 
-            //如果点击了开始，则旋转镜头，进行人物选择
+            //todo:如果点击了开始，则旋转镜头，进行人物选择
 
 
         }

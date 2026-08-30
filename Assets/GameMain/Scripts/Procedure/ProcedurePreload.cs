@@ -26,7 +26,7 @@ namespace ZombiesMustDie
             // "Armor",
             // "Asteroid",
             // "Entity",
-            // "Music",
+            "Music",
             "Scene",
             // "Sound",
             // "Thruster",
