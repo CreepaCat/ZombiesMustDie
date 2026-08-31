@@ -12,6 +12,7 @@ namespace ZombiesMustDie
     {
 
         private bool m_TurnComplete;
+        private MenuCameraTurnDirection m_TurnDirection;
 
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
@@ -23,7 +24,7 @@ namespace ZombiesMustDie
             int directionValue =
                 procedureOwner.GetData<VarInt32>("MenuCameraTurnDirection");
 
-            MenuCameraTurnDirection direction =
+            m_TurnDirection =
                 (MenuCameraTurnDirection)directionValue;
 
             MenuCameraController cameraController =
@@ -35,7 +36,7 @@ namespace ZombiesMustDie
                 return;
             }
 
-            cameraController.Turn(direction, OnTurnComplete);
+            cameraController.Turn(m_TurnDirection, OnTurnComplete);
         }
 
         protected override void OnUpdate(
@@ -50,8 +51,15 @@ namespace ZombiesMustDie
                 return;
             }
 
-            // 根据实际流程替换,角色选择界面
-            ChangeState<ProcedureSelectCharacter>(procedureOwner);
+            // 根据实际流程替换,进入角色选择界面 还是返回菜单界面
+            if (m_TurnDirection == MenuCameraTurnDirection.Right)
+            {
+                ChangeState<ProcedureStartMenu>(procedureOwner);
+            }
+            else if (m_TurnDirection == MenuCameraTurnDirection.Left)
+            {
+                ChangeState<ProcedureSelectCharacter>(procedureOwner);
+            }
         }
 
         private void OnTurnComplete()

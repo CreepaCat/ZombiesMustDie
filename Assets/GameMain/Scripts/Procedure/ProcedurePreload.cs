@@ -22,17 +22,17 @@ namespace ZombiesMustDie
         //场景和UIForm 以及音乐音效等，一个开始菜单场景所必须的资源
         public static readonly string[] DataTableNames = new string[]
         {
-            // "Aircraft",
+            "Character",
             // "Armor",
             // "Asteroid",
-            // "Entity",
+            "Entity",
             "Music",
             "Scene",
             // "Sound",
             // "Thruster",
             "UIForm",
             // "UISound",
-            // "Weapon",
+            "Weapon",
         };
 
         private Dictionary<string, bool> m_LoadedFlag = new Dictionary<string, bool>();

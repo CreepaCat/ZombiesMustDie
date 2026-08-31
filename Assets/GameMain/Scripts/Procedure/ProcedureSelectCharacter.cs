@@ -2,13 +2,28 @@ using UnityGameFramework.Runtime;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 using GameFramework.Procedure;
 using GameFramework.Event;
+using UnityEditor;
 
 namespace ZombiesMustDie
 {
     public class ProcedureSelectCharacter : ProcedureBase
     {
 
+        private bool m_BackToMenu = false;
+        private bool m_ChooseLevel = false;
+        private MenuCameraTurnDirection m_TurnDirection = MenuCameraTurnDirection.Right;
         private SelectCharacterForm m_SelectCharacterForm = null;
+
+        public void BackToMenu(MenuCameraTurnDirection turnDirection)
+        {
+            if (m_BackToMenu) //防止重复调用
+            {
+                return;
+            }
+            m_BackToMenu = true;
+
+            m_TurnDirection = turnDirection;
+        }
 
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
@@ -24,7 +39,19 @@ namespace ZombiesMustDie
         protected override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds, float realElapseSeconds)
         {
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
-            //todo:进入游戏 或 返回菜单界面
+            //todo:进入关卡选择界面 或 返回菜单界面
+
+            if (m_BackToMenu)
+            {
+                m_BackToMenu = false;
+
+                //相机旋转方向参数，由FSM管理器记录
+                procedureOwner.SetData<VarInt32>(
+                    "MenuCameraTurnDirection",
+                    (int)m_TurnDirection);
+
+                ChangeState<ProcedureTurnMenuCam>(procedureOwner);
+            }
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner, bool isShutdown)
@@ -33,6 +60,12 @@ namespace ZombiesMustDie
 
             //注销事件
             GameEntry.Event.Unsubscribe(OpenUIFormSuccessEventArgs.EventId, OnOpenUIFormSuccess);
+
+            if (m_SelectCharacterForm != null)
+            {
+                GameEntry.UI.CloseUIForm(m_SelectCharacterForm);
+                m_SelectCharacterForm = null;
+            }
         }
 
         private void OnOpenUIFormSuccess(object sender, GameEventArgs e)

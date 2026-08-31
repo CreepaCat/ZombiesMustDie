@@ -1,0 +1,8 @@
+#	角色表					
+#	角色编号	名称	角色实体编号	默认武器编号	最大生命值	移动速度
+#	int	string	int	int	int	float
+#	Id	Name	EntityId	DefaultWeaponId	MaxHP	MoveSpeed
+#	0	null	0	0	0	
+	1	Engineer	10001	1	150	4.5
+	2	Sniper	10002	2	90	4
+	3	Infanty	10003	3	120	5

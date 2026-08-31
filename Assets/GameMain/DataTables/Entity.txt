@@ -1,0 +1,15 @@
+#	实体表		
+#	int		string
+#	Id		AssetName
+#	实体编号	策划备注	资源名称
+	10001	角色/工程师	Character/Engineer
+	10002	角色/狙击手	Character/Sniper
+	10003	角色/突击步兵	Character/AssaultSoldier
+	20001	武器/扳手	Weapon/EngineerRifle
+	20002	武器/狙击步枪	Weapon/SniperRifle
+	20003	武器/突击步枪	Weapon/AssaultRifle
+	2101	武器/敌人武器	Weapon/EnemyRifle
+	30001	玩家子弹	Bullet/PlayerBullet
+	30002	敌人子弹	Bullet/EnemyBullet
+
+
