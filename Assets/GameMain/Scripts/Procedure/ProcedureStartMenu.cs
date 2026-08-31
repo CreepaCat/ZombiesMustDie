@@ -8,11 +8,17 @@ namespace ZombiesMustDie
     public class ProcedureStartMenu : ProcedureBase
     {
         private bool m_StartGame = false;
+        private MenuCameraTurnDirection m_TurnDirection = MenuCameraTurnDirection.Left;
         private StartMenuForm m_MenuForm = null;
 
-        public void StartGame()
+        public void StartGame(MenuCameraTurnDirection turnDirection)
         {
+            if (m_StartGame) //防止重复调用
+            {
+                return;
+            }
             m_StartGame = true;
+            m_TurnDirection = turnDirection;
         }
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
@@ -30,6 +36,17 @@ namespace ZombiesMustDie
             base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
 
             //todo:如果点击了开始，则旋转镜头，进行人物选择
+            if (m_StartGame)
+            {
+                m_StartGame = false;
+
+                //相机旋转方向参数，由FSM管理器记录
+                procedureOwner.SetData<VarInt32>(
+                    "MenuCameraTurnDirection",
+                    (int)m_TurnDirection);
+
+                ChangeState<ProcedureTurnMenuCam>(procedureOwner);
+            }
 
 
         }

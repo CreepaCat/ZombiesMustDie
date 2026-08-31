@@ -28,5 +28,10 @@ namespace ZombiesMustDie
         /// 关于。
         /// </summary>
         AboutForm = 102,
+
+        /// <summary>
+        /// 选择角色。
+        /// </summary>
+        SelectCharacterForm = 103,
     }
 }

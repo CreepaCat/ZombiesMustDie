@@ -13,7 +13,8 @@ namespace ZombiesMustDie
 
         public void OnStartButtonClick()
         {
-            m_ProcedureMenu.StartGame();
+            //旋转相机
+            m_ProcedureMenu.StartGame(MenuCameraTurnDirection.Left);
         }
 
         public void OnSettingButtonClick()
