@@ -14,6 +14,9 @@ namespace ZombiesMustDie
 
             // 声音配置：根据用户配置数据，设置即将使用的声音选项
             InitSoundSettings();
+
+            //加载玩家数据
+            InitPlayerData();
         }
 
         protected override void OnUpdate(ProcedureOwner procedureOwner, float elapseSeconds, float realElapseSeconds)
@@ -39,6 +42,13 @@ namespace ZombiesMustDie
             // GameEntry.Sound.Mute("UISound", GameEntry.Setting.GetBool("Setting.UISoundMuted", false));
             // GameEntry.Sound.SetVolume("UISound", GameEntry.Setting.GetFloat("Setting.UISoundVolume", 1f));
             Log.Info("Init sound settings complete.");
+        }
+
+        private void InitPlayerData()
+        {
+            //todo:可以考虑将玩家数据做成单独的GF Component，专门管理玩家数据的加载和保存
+            // GameEntry.Setting.GetInt(Constant.Setting.Money, 300);
+
         }
     }
 }

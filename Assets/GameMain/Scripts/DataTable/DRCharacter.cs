@@ -30,6 +30,8 @@ namespace ZombiesMustDie
 
         public float MoveSpeed { get; private set; }
 
+        public int UnlockMoney { get; private set; }
+
         public override bool ParseDataRow(string dataRowString, object userData)
         {
             string[] columnStrings = dataRowString.Split(DataTableExtension.DataSplitSeparators);
@@ -46,7 +48,7 @@ namespace ZombiesMustDie
             DefaultWeaponId = int.Parse(columnStrings[index++]);
             MaxHP = int.Parse(columnStrings[index++]);
             MoveSpeed = float.Parse(columnStrings[index++]);
-
+            UnlockMoney = int.Parse(columnStrings[index++]);
             GeneratePropertyArray();
             return true;
         }
@@ -63,6 +65,7 @@ namespace ZombiesMustDie
                     DefaultWeaponId = binaryReader.Read7BitEncodedInt32();
                     MaxHP = binaryReader.Read7BitEncodedInt32();
                     MoveSpeed = binaryReader.ReadSingle();
+                    UnlockMoney = binaryReader.Read7BitEncodedInt32();
                 }
             }
 
