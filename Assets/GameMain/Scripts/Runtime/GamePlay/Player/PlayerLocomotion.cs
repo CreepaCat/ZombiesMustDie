@@ -7,6 +7,8 @@ namespace ZombiesMustDie
     /// </summary>
     public class PlayerLocomotion : MonoBehaviour
     {
+        [SerializeField] private float moveSpeedMultiplier = 3.0f;
+        [SerializeField, Min(0.0f)] private float groundStickSpeed = 2.0f;
         [SerializeField] private Transform cameraRoot;
 
         private Player player;
@@ -40,6 +42,8 @@ namespace ZombiesMustDie
 
         private void Update()
         {
+
+            animator.SetFloat("Velocity", moveInput.sqrMagnitude);
             animator.SetFloat("SpeedX", moveInput.x);
             animator.SetFloat("SpeedZ", moveInput.y);
 
@@ -59,8 +63,12 @@ namespace ZombiesMustDie
 
         private void OnAnimatorMove()
         {
-            Vector3 delta = animator.deltaPosition;
-            delta.y = 0.0f;
+            if (moveInput.sqrMagnitude < 0.001f)
+            {
+                return;
+            }
+            Vector3 delta = animator.deltaPosition * moveSpeedMultiplier;
+            delta.y = -groundStickSpeed * Time.deltaTime;
             controller.Move(delta);
         }
 
