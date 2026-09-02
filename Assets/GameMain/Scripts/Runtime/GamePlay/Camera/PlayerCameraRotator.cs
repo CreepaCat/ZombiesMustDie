@@ -1,12 +1,13 @@
 
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace ZombiesMustDie
 {
 
-    //本项目的相机仅跟随玩家移动而不旋转，视角固定
-    [ExecuteAlways]
+    /// <summary>
+    /// 控制 CameraRoot 跟随玩家，并根据观察输入更新水平与俯仰角度。
+    /// 实际相机位置、平滑和遮挡由 CinemachineThirdPersonFollow 负责。
+    /// </summary>
     public class PlayerCameraRotator : MonoBehaviour
     {
         [Header("相机")]
@@ -18,23 +19,21 @@ namespace ZombiesMustDie
 
         public float TopClamp = 70.0f;
         public float BottomClamp = -30.0f;
-        public float CameraAngleOverride = 0.0f;
-        public bool LockCameraPosition = false;
-        public bool LockCameraRotation = false;
 
-        // cinemachine
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
 
-        Vector2 look;
-        bool isDeviceMouse;
-        Player player;
-
-
+        private Vector2 look;
+        private bool isDeviceMouse;
+        private Player player;
 
         private void Awake()
         {
             player = Player.GetInstance();
+
+            Vector3 currentRotation = CinemachineCameraTarget.transform.eulerAngles;
+            _cinemachineTargetYaw = currentRotation.y;
+            _cinemachineTargetPitch = NormalizeAngle(currentRotation.x);
         }
 
         private void OnEnable()
@@ -53,20 +52,17 @@ namespace ZombiesMustDie
 
         }
 
-        private void Update()
-        {
-            var followPos = GetFollowPos();
-            followPos.y += offsetY;
-            transform.position = followPos;
-
-        }
         private void LateUpdate()
         {
-            if (LockCameraRotation)
-            {
-                return;
-            }
+            FollowPlayer();
             CameraRotation();
+        }
+
+        private void FollowPlayer()
+        {
+            Vector3 followPosition = GetFollowPos();
+            followPosition.y += offsetY;
+            transform.position = followPosition;
         }
 
         private Vector3 GetFollowPos()
@@ -81,7 +77,7 @@ namespace ZombiesMustDie
 
         private void CameraRotation()
         {
-            if (!LockCameraPosition && look.sqrMagnitude > 0.01f)
+            if (look.sqrMagnitude > 0.01f)
             {
                 float deltaTimeMultiplier = isDeviceMouse ? 1.0f : Time.deltaTime;
 
@@ -89,18 +85,18 @@ namespace ZombiesMustDie
                 _cinemachineTargetPitch += look.y * deltaTimeMultiplier;
             }
 
-            _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
-            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+            _cinemachineTargetYaw = NormalizeAngle(_cinemachineTargetYaw);
+            _cinemachineTargetPitch = Mathf.Clamp(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
-            // 虚拟相机跟随目标
-            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
-                _cinemachineTargetYaw, 0.0f);
+            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(
+                _cinemachineTargetPitch,
+                _cinemachineTargetYaw,
+                0.0f);
         }
-        private float ClampAngle(float lfAngle, float lfMin, float lfMax)
+
+        private static float NormalizeAngle(float angle)
         {
-            if (lfAngle < -360f) lfAngle += 360f;
-            if (lfAngle > 360f) lfAngle -= 360f;
-            return Mathf.Clamp(lfAngle, lfMin, lfMax);
+            return Mathf.Repeat(angle + 180.0f, 360.0f) - 180.0f;
         }
 
     }
