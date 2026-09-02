@@ -7,6 +7,20 @@ namespace ZombiesMustDie
     /// </summary>
     public class PlayerLocomotion : MonoBehaviour
     {
+        private Player player;
+        private InputReader input => player.Input;
+
+        private void Awake()
+        {
+            player = Player.GetInstance();
+        }
+
+        private void Start()
+        {
+            input.EnablePlayerActions();
+        }
+
+
 
     }
 }
