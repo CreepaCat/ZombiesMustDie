@@ -11,20 +11,15 @@ namespace ZombiesMustDie
         private static Player m_Instance = null;
 
         private Animator m_Animator;
+        private CharacterController m_Controller;
+
+
+        //Getters
         public InputReader Input => input;
 
         public Animator Animator => m_Animator;
 
-
-        void Awake()
-        {
-            m_Instance = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-            m_Animator = GetComponentInChildren<Animator>();
-            if (m_Animator == null)
-            {
-                Debug.LogError("Player Animator is null");
-            }
-        }
+        public CharacterController Controller => m_Controller;
 
         public static Player GetInstance()
         {
@@ -34,5 +29,18 @@ namespace ZombiesMustDie
             }
             return m_Instance;
         }
+
+        void Awake()
+        {
+            m_Instance = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+            m_Animator = GetComponentInChildren<Animator>();
+            m_Controller = GetComponent<CharacterController>();
+            if (m_Animator == null)
+            {
+                Debug.LogError("Player Animator is null");
+            }
+        }
+
+
     }
 }
