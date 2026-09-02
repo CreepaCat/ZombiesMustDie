@@ -7,12 +7,30 @@ namespace ZombiesMustDie
     /// </summary>
     public class PlayerLocomotion : MonoBehaviour
     {
+        [SerializeField] private Transform cameraRoot;
+
         private Player player;
+        private Animator animator;
+        private CharacterController controller;
+        private Vector2 moveInput;
+
         private InputReader input => player.Input;
 
         private void Awake()
         {
             player = Player.GetInstance();
+            animator = GetComponentInChildren<Animator>();
+            controller = GetComponent<CharacterController>();
+        }
+
+        private void OnEnable()
+        {
+            input.Move += OnMove;
+        }
+
+        private void OnDisable()
+        {
+            input.Move -= OnMove;
         }
 
         private void Start()
@@ -20,7 +38,31 @@ namespace ZombiesMustDie
             input.EnablePlayerActions();
         }
 
+        private void Update()
+        {
+            animator.SetFloat("SpeedX", moveInput.x);
+            animator.SetFloat("SpeedZ", moveInput.y);
 
+            Vector3 cameraForward = cameraRoot.forward;
+            cameraForward.y = 0.0f;
+
+            if (cameraForward.sqrMagnitude > 0.001f)
+            {
+                transform.rotation = Quaternion.LookRotation(cameraForward);
+            }
+        }
+
+        private void OnMove(Vector2 value)
+        {
+            moveInput = value;
+        }
+
+        private void OnAnimatorMove()
+        {
+            Vector3 delta = animator.deltaPosition;
+            delta.y = 0.0f;
+            controller.Move(delta);
+        }
 
     }
 }
