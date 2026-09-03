@@ -5,7 +5,8 @@ namespace ZombiesMustDie
     /// <summary>
     /// 代替Animator来处理敌人的动画播放
     /// </summary>
-    public class EnemyAnimationHandler : MonoBehaviour
+    [RequireComponent(typeof(Animator))]
+    public class EnemyAnimation : MonoBehaviour
     {
 
         private Animator m_Animator;

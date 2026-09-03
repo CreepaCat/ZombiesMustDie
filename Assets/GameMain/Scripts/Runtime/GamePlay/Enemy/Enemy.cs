@@ -1,31 +1,75 @@
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace ZombiesMustDie
 {
-    [RequireComponent(typeof(Animator))]
-    [RequireComponent(typeof(NavMeshAgent))]
-    [RequireComponent(typeof(AiController))]
+    [RequireComponent(typeof(EnemyAnimation))]
+    [RequireComponent(typeof(EnemyNavigation))]
+    [RequireComponent(typeof(EnemyTargetDetector))]
     public class Enemy : MonoBehaviour
     {
 
-        private Animator m_Animator;
-        private NavMeshAgent m_Agent;
-        private AiController m_AiController;
+        //CONFIG
+        [Header("自动寻路")]
+        [SerializeField] private float moveSpeed = 3.5f;
+        [SerializeField] private float rotationSpeed = 1000f;
+        [SerializeField] private float stoppingDistance = 0.5f;
 
-        public Animator Animator => m_Animator;
-        public NavMeshAgent Agent => m_Agent;
-        public AiController AiController => m_AiController;
+        [SerializeField] private string currentState;
+
+        //CACHE
+        private EnemyAnimation m_Animation;
+        private EnemyNavigation m_Navigation;
+        private EnemyStateMachine m_StateMachine;
+        private EnemyTargetDetector m_TargetDetector;
+
+        //GETTERS
+        public EnemyAnimation Animation => m_Animation;
+        public EnemyNavigation Navigation => m_Navigation;
+
+        public EnemyStateMachine StateMachine => m_StateMachine;
+
+        public EnemyTargetDetector TargetDetector => m_TargetDetector;
         void Awake()
         {
-            m_Animator = GetComponentInChildren<Animator>();
-            m_Agent = GetComponent<NavMeshAgent>();
-            m_AiController = GetComponent<AiController>();
+            m_Animation = GetComponent<EnemyAnimation>();
+            m_Navigation = GetComponent<EnemyNavigation>();
+            m_TargetDetector = GetComponent<EnemyTargetDetector>();
         }
 
-        public void SetDestination(Vector3 destination)
+        void Start()
         {
-            m_AiController.UpdateDestination(destination);
+            //初始化NavAgent设置
+            m_Navigation.InitAgent(moveSpeed, rotationSpeed, stoppingDistance);
+            InitStateMachine();
+
+        }
+
+        private void InitStateMachine()
+        {
+            m_StateMachine = new();
+            Enemy_Idle idle = new(this);
+            Enemy_MoveToFortress moveToFortress = new(this);
+            Enemy_ChasePlayer chasePlayer = new(this);
+            Enemy_Attack attack = new(this);
+            m_StateMachine.AddState(idle);
+            m_StateMachine.AddState(moveToFortress);
+            m_StateMachine.AddState(chasePlayer);
+            m_StateMachine.AddState(attack);
+
+            m_StateMachine.Init(idle.GetType());
+        }
+
+        void Update()
+        {
+            m_StateMachine.LoagicUpdate();
+            currentState = m_StateMachine.CurrentState.ToString();
+        }
+
+        public void OnBornOver()
+        {
+            Debug.Log("将目标点设为玩家总部基地");
+            // m_Navigation.SetDestination(HeadQuarter.GetPosition());
+            StateMachine.ChangeState(typeof(Enemy_MoveToFortress));
         }
     }
 }
