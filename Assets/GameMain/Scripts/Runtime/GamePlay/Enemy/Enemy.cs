@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace ZombiesMustDie
 {
@@ -63,12 +64,16 @@ namespace ZombiesMustDie
         {
             m_StateMachine.LoagicUpdate();
             currentState = m_StateMachine.CurrentState.ToString();
+
+            if (Keyboard.current.kKey.wasPressedThisFrame)
+            {
+                m_Animation.PlayTargetAnimation(EnemyAnimationParamConfig.Clip_Death, true);
+            }
         }
 
         public void OnBornOver()
         {
             Debug.Log("将目标点设为玩家总部基地");
-            // m_Navigation.SetDestination(HeadQuarter.GetPosition());
             StateMachine.ChangeState(typeof(Enemy_MoveToFortress));
         }
     }

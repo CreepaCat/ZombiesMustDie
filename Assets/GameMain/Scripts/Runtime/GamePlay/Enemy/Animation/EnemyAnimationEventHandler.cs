@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace ZombiesMustDie
 {
+    /// <summary>
+    /// 处理动画时间
+    /// </summary>
     public class EnemyAnimationEventHandler : MonoBehaviour
     {
 
@@ -14,7 +17,7 @@ namespace ZombiesMustDie
         }
         private void BornOver(AnimationEvent animationEvent)
         {
-            Debug.Log("敌人出生动画播放完毕,animationEvent.animatorClipInfo.weight=" + animationEvent.animatorClipInfo.weight);
+            //Debug.Log("敌人出生动画播放完毕,animationEvent.animatorClipInfo.weight=" + animationEvent.animatorClipInfo.weight);
             enemy.OnBornOver();
         }
     }
