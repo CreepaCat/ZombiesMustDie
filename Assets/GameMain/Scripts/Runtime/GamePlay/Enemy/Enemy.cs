@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -71,10 +72,33 @@ namespace ZombiesMustDie
             }
         }
 
+        public Vector3 GetDirectionToPlayer()
+        {
+            var dirToPlayer = (TargetDetector.GetPlayerPosition() - transform.position).normalized;
+            dirToPlayer.y = 0f;
+            return dirToPlayer;
+        }
+
         public void OnBornOver()
         {
             Debug.Log("将目标点设为玩家总部基地");
             StateMachine.ChangeState(typeof(Enemy_MoveToFortress));
         }
+
+        #region 战斗相关
+
+        internal void Attack()
+        {
+            Animation.PlayTargetAnimation(EnemyAnimationParamConfig.Clip_Attack01, true);
+        }
+
+        internal void OnAtkHit()
+        {
+            //todo:检查伤害区域是否有玩家
+            Debug.Log("OnAtkHit");
+
+            GetComponent<CombatTarget>().MeleeAttack();
+        }
+        #endregion
     }
 }

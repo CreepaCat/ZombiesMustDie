@@ -12,7 +12,7 @@ namespace ZombiesMustDie
 
 
         public static readonly int Clip_Death = Animator.StringToHash("Death");
-        public static readonly int Clip_Attack01 = Animator.StringToHash("Attack01");
-        public static readonly int Clip_Attack02 = Animator.StringToHash("Attack02");
+        public static readonly int Clip_Attack01 = Animator.StringToHash("Attack_01");
+        public static readonly int Clip_Attack02 = Animator.StringToHash("Attack_02");
     }
 }

@@ -19,6 +19,7 @@ namespace ZombiesMustDie
         }
         public override void OnLogicUpdate()
         {
+            if (Enemy.Animation.IsInteracting) return;
             if (Enemy.TargetDetector.GetDistanceToPlayer() < Constant.Enemy.ChaseRange)
             {
                 StateMachine.ChangeState(typeof(Enemy_ChasePlayer));

@@ -18,7 +18,7 @@ namespace ZombiesMustDie
         public override void OnLogicUpdate()
         {
             if (Enemy.Animation.IsInteracting) return;
-            StateMachine.ChangeState(typeof(Enemy_MoveToFortress));
+            // StateMachine.ChangeState(typeof(Enemy_MoveToFortress));
         }
 
         public override void OnExit()

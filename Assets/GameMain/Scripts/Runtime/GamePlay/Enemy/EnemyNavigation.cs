@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -39,7 +38,7 @@ namespace ZombiesMustDie
 
         void Update()
         {
-            m_Animator.SetFloat("Speed", m_NavMeshAgent.velocity.magnitude);
+            m_Animator.SetFloat(EnemyAnimationParamConfig.Param_Speed, m_NavMeshAgent.velocity.magnitude);
 
             UpdateDestination();
         }
@@ -54,8 +53,6 @@ namespace ZombiesMustDie
 
             }
         }
-
-        //todo:PlayerDetector.cs
         public float DistanceToPlayer()
         {
             if (m_Player == null) return float.MaxValue;
@@ -64,14 +61,12 @@ namespace ZombiesMustDie
 
         internal void SetDestination(Vector3 destination)
         {
-            //m_NavMeshAgent.SetDestination(destination);
             _desiredDestination = destination;
         }
 
         internal void StopMoving()
         {
             m_NavMeshAgent.isStopped = true;
-            // m_NavMeshAgent.speed = 0f;
         }
 
         public void RestoreMoving()
