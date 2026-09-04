@@ -24,6 +24,7 @@ namespace ZombiesMustDie
         private readonly Collider[] hitBuffer = new Collider[HitBufferSize];
         private readonly HashSet<CombatTarget> hitTargets = new HashSet<CombatTarget>();
         private CombatTarget owner;
+        private IWeapon currentWeapon;
 
         public CombatTarget Owner
         {
@@ -39,12 +40,18 @@ namespace ZombiesMustDie
         }
 
         public GameObject EquippedWeapon => equippedWeapon;
+        public IWeapon CurrentWeapon => currentWeapon;
         public Transform WeaponSocket => weaponSocket;
         public float AttackDamage => attackDamage;
 
         private void Awake()
         {
             owner = GetComponent<CombatTarget>();
+
+            if (equippedWeapon != null)
+            {
+                EquipWeapon(equippedWeapon);
+            }
         }
 
         public void ConfigureAttack(float damage)
@@ -54,14 +61,71 @@ namespace ZombiesMustDie
 
         public void EquipWeapon(GameObject weapon)
         {
+            if (weapon == null)
+            {
+                UnequipWeapon();
+                return;
+            }
+
+            IWeapon weaponLogic = weapon.GetComponent<IWeapon>();
+            if (weaponLogic != null)
+            {
+                EquipWeapon(weaponLogic);
+                return;
+            }
+
+            ClearCurrentWeapon();
             equippedWeapon = weapon;
+        }
+
+        public bool EquipWeapon(IWeapon weapon)
+        {
+            if (weapon == null || weapon.WeaponObject == null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(currentWeapon, weapon))
+            {
+                return true;
+            }
+
+            ClearCurrentWeapon();
+            currentWeapon = weapon;
+            equippedWeapon = weapon.WeaponObject;
+            currentWeapon.Equip(this);
+            return true;
         }
 
         public GameObject UnequipWeapon()
         {
             GameObject weapon = equippedWeapon;
-            equippedWeapon = null;
+            ClearCurrentWeapon();
             return weapon;
+        }
+
+        internal bool UnequipWeapon(IWeapon weapon)
+        {
+            if (!ReferenceEquals(currentWeapon, weapon))
+            {
+                return false;
+            }
+
+            ClearCurrentWeapon();
+            return true;
+        }
+
+        public bool TryAttack()
+        {
+            return currentWeapon != null && currentWeapon.TryAttack();
+        }
+
+        private void ClearCurrentWeapon()
+        {
+            IWeapon previousWeapon = currentWeapon;
+            currentWeapon = null;
+            equippedWeapon = null;
+            previousWeapon?.Unequip();
         }
         /// <summary>
         /// 近战攻击目标判定
