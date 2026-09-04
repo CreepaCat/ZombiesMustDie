@@ -21,9 +21,12 @@ namespace ZombiesMustDie
 
         [Tooltip("玩家在地面上的贴地速度")]
         [SerializeField, Min(0.0f)] private float groundStickSpeed = 10.0f;
+
+        //相机根物体，玩家跟随它旋转
         [SerializeField] private Transform cameraRoot;
 
         private Player player;
+        private Animator animator;
 
 
         private Vector2 moveInput; //移动输入
@@ -34,6 +37,7 @@ namespace ZombiesMustDie
         private void Awake()
         {
             player = Player.GetInstance();
+            animator = GetComponent<Animator>();
 
         }
 
@@ -60,10 +64,19 @@ namespace ZombiesMustDie
         targetMoveInput,
         moveInputChangeSpeed * Time.deltaTime);
 
-            player.Animator.SetFloat("Velocity", moveInput.sqrMagnitude);
-            player.Animator.SetFloat("SpeedX", moveInput.x);
-            player.Animator.SetFloat("SpeedZ", moveInput.y);
+            if (player.IsDead)
+            {
+                UpdateAnimator(0f, 0f, 0f);
+                return;
+            }
 
+            UpdateAnimator(moveInput.sqrMagnitude, moveInput.x, moveInput.y);
+
+            RotateWhithCamera();
+        }
+
+        private void RotateWhithCamera()
+        {
             Vector3 cameraForward = cameraRoot.forward;
             cameraForward.y = 0.0f;
 
@@ -71,6 +84,13 @@ namespace ZombiesMustDie
             {
                 transform.rotation = Quaternion.LookRotation(cameraForward);
             }
+        }
+
+        private void UpdateAnimator(float velocity, float speedx, float speedz)
+        {
+            animator.SetFloat(PlayerAnimationParamConfig.Param_Velocity, velocity);
+            animator.SetFloat(PlayerAnimationParamConfig.Param_SpeedX, speedx);
+            animator.SetFloat(PlayerAnimationParamConfig.Param_SpeedZ, speedz);
         }
 
         /// <summary>
@@ -93,7 +113,7 @@ namespace ZombiesMustDie
                 return;
             }
             //后续在应用roll时，可能需要在roll时也进行根运动，需要额外flag判断
-            Vector3 delta = player.Animator.deltaPosition * rootMotionMoveMultiplier;
+            Vector3 delta = animator.deltaPosition * rootMotionMoveMultiplier;
             delta.y = -groundStickSpeed * Time.deltaTime;
 
             if (moveInput.y >= 0.0f)
