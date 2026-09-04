@@ -63,7 +63,10 @@ namespace ZombiesMustDie
             equippedWeapon = null;
             return weapon;
         }
-
+        /// <summary>
+        /// 近战攻击目标判定
+        /// </summary>
+        /// <returns>成功伤害目标数</returns>
         public int MeleeAttack()
         {
             if (meleeSphereCenter == null || meleeRadius <= 0f || attackDamage <= 0f)
@@ -98,7 +101,7 @@ namespace ZombiesMustDie
                 Vector3 hitDirection = target.transform.position - transform.position;
                 hitDirection.y = 0f;
                 hitDirection = hitDirection.sqrMagnitude > 0f ? hitDirection.normalized : transform.forward;
-
+                //检查伤害是否成功
                 DamageResult result = TryDealDamage(target, attackDamage, hitPoint, hitDirection);
                 if (result.Succeeded)
                 {

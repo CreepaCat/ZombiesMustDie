@@ -24,6 +24,7 @@ namespace ZombiesMustDie
 
         public DamageResult TakeDamage(float damage)
         {
+            //死亡、负数、非数、无限大检查
             if (IsDead || damage <= 0f || float.IsNaN(damage) || float.IsInfinity(damage))
             {
                 return DamageResult.Failed(IsDead);
