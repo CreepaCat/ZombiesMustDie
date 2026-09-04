@@ -7,6 +7,7 @@ namespace ZombiesMustDie
     [RequireComponent(typeof(EnemyAnimation))]
     [RequireComponent(typeof(EnemyNavigation))]
     [RequireComponent(typeof(EnemyTargetDetector))]
+    [RequireComponent(typeof(CombatController))]
     public class Enemy : MonoBehaviour
     {
 
@@ -23,6 +24,7 @@ namespace ZombiesMustDie
         private EnemyNavigation m_Navigation;
         private EnemyStateMachine m_StateMachine;
         private EnemyTargetDetector m_TargetDetector;
+        private CombatController m_Combat;
 
         //GETTERS
         public EnemyAnimation Animation => m_Animation;
@@ -36,6 +38,7 @@ namespace ZombiesMustDie
             m_Animation = GetComponent<EnemyAnimation>();
             m_Navigation = GetComponent<EnemyNavigation>();
             m_TargetDetector = GetComponent<EnemyTargetDetector>();
+            m_Combat = GetComponent<CombatController>();
         }
 
         void Start()
@@ -94,10 +97,8 @@ namespace ZombiesMustDie
 
         internal void OnAtkHit()
         {
-            //todo:检查伤害区域是否有玩家
             Debug.Log("OnAtkHit");
-
-            GetComponent<CombatTarget>().MeleeAttack();
+            m_Combat.MeleeAttack();
         }
         #endregion
     }

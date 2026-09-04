@@ -50,6 +50,7 @@ GameObject:
   - component: {fileID: 720687008489052159}
   - component: {fileID: 3363471293979872283}
   - component: {fileID: 7057081178670536900}
+  - component: {fileID: 6930189319726786191}
   m_Layer: 8
   m_Name: EnemyModels
   m_TagString: Untagged
@@ -231,45 +232,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 911cf92d5f24b36488426ce8841c0fc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CombatTarget
-  damage: 5
-  meeleSphereCenter: {fileID: 1181689743990167807}
-  meeleRadius: 0.6
+  faction: 2
+--- !u!114 &6930189319726786191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8331815165574962788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dab7f62ab579204c9336ba7f25f0600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.CombatController
+  attackDamage: 5
+  meleeSphereCenter: {fileID: 1181689743990167807}
+  meleeRadius: 0.6
   targetLayer:
     serializedVersion: 2
     m_Bits: 128
-  targetColliders:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  weaponSocket: {fileID: 0}
+  equippedWeapon: {fileID: 0}
 --- !u!1001 &4360390301323697685
 PrefabInstance:
   m_ObjectHideFlags: 0
