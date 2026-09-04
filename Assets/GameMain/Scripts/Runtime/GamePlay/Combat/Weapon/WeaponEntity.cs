@@ -5,26 +5,6 @@ using UnityGameFramework.Runtime;
 namespace ZombiesMustDie
 {
     /// <summary>
-    /// 创建武器实体时传入的运行时数据。
-    /// </summary>
-    public class WeaponEntityData : EntityData
-    {
-        public WeaponEntityData(
-            int entityId,
-            int entityTypeId,
-            int weaponId,
-            CombatController owner)
-            : base(entityId, entityTypeId)
-        {
-            WeaponId = weaponId;
-            Owner = owner;
-        }
-
-        public int WeaponId { get; }
-        public CombatController Owner { get; }
-    }
-
-    /// <summary>
     /// 所有武器实体的基类，统一管理装备关系、DRWeapon 数据和攻击冷却。
     /// </summary>
     public abstract class WeaponEntity : Entity, IWeapon
@@ -55,20 +35,25 @@ namespace ZombiesMustDie
                 return;
             }
 
-            if (GameEntry.DataTable == null)
+            weaponData = entityData.WeaponConfig;
+            if (weaponData == null && GameEntry.DataTable == null)
             {
                 Log.Error("DataTable component is not initialized.");
                 return;
             }
 
-            IDataTable<DRWeapon> weaponTable = GameEntry.DataTable.GetDataTable<DRWeapon>();
-            if (weaponTable == null)
+            if (weaponData == null)
             {
-                Log.Error("Weapon data table is not loaded.");
-                return;
+                IDataTable<DRWeapon> weaponTable = GameEntry.DataTable.GetDataTable<DRWeapon>();
+                if (weaponTable == null)
+                {
+                    Log.Error("Weapon data table is not loaded.");
+                    return;
+                }
+
+                weaponData = weaponTable.GetDataRow(entityData.WeaponId);
             }
 
-            weaponData = weaponTable.GetDataRow(entityData.WeaponId);
             if (weaponData == null)
             {
                 Log.Error("Weapon data row '{0}' does not exist.", entityData.WeaponId);

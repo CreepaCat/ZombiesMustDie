@@ -1,4 +1,4 @@
-using System;
+using GameFramework.DataTable;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
@@ -14,29 +14,42 @@ namespace ZombiesMustDie
             int entityTypeId,
             int weaponId,
             CombatController owner,
-            GameObject projectilePrefab,
-            string muzzlePath = null)
-            : base(entityId, entityTypeId, weaponId, owner)
+            string muzzlePath = null,
+            string bulletEntityGroupName = "Bullet",
+            float bulletLifetime = 5f,
+            float bulletCollisionRadius = 0.05f,
+            int bulletHitLayerMask = -1,
+            DRWeapon weaponConfig = null)
+            : base(entityId, entityTypeId, weaponId, owner, weaponConfig)
         {
-            ProjectilePrefab = projectilePrefab;
             MuzzlePath = muzzlePath;
+            BulletEntityGroupName = bulletEntityGroupName;
+            BulletLifetime = Mathf.Max(0.01f, bulletLifetime);
+            BulletCollisionRadius = Mathf.Max(0.001f, bulletCollisionRadius);
+            BulletHitLayer = bulletHitLayerMask;
         }
 
-        public GameObject ProjectilePrefab { get; }
         public string MuzzlePath { get; }
+        public string BulletEntityGroupName { get; }
+        public float BulletLifetime { get; }
+        public float BulletCollisionRadius { get; }
+        public LayerMask BulletHitLayer { get; }
     }
 
     /// <summary>
-    /// 从枪口生成子弹，并使用 DRWeapon 的速度与散布数据设置初始运动。
+    /// 从枪口请求生成 BulletEntity，并使用 DRWeapon 构造其运行数据。
     /// </summary>
-    public sealed class ProjectileWeaponEntity : WeaponEntity
+    public class ProjectileWeaponEntity : WeaponEntity
     {
+        private static int nextBulletEntityId;
+
         private Transform muzzle;
-        private GameObject projectilePrefab;
+        private string bulletEntityGroupName;
+        private float bulletLifetime;
+        private float bulletCollisionRadius;
+        private LayerMask bulletHitLayer;
 
-        public event Action<GameObject, ProjectileWeaponEntity> ProjectileSpawned;
-
-        public GameObject LastProjectile { get; private set; }
+        public int LastBulletEntityId { get; private set; }
 
         protected override void OnShow(object userData)
         {
@@ -49,39 +62,72 @@ namespace ZombiesMustDie
                 return;
             }
 
-            projectilePrefab = entityData.ProjectilePrefab;
             muzzle = ResolveChild(entityData.MuzzlePath);
-            LastProjectile = null;
+            bulletEntityGroupName = entityData.BulletEntityGroupName;
+            bulletLifetime = entityData.BulletLifetime;
+            bulletCollisionRadius = entityData.BulletCollisionRadius;
+            bulletHitLayer = entityData.BulletHitLayer;
+            LastBulletEntityId = 0;
         }
 
         protected override void OnHide(bool isShutdown, object userData)
         {
             muzzle = null;
-            projectilePrefab = null;
-            LastProjectile = null;
-            ProjectileSpawned = null;
+            bulletEntityGroupName = null;
+            bulletLifetime = 0f;
+            bulletCollisionRadius = 0f;
+            bulletHitLayer = default;
+            LastBulletEntityId = 0;
 
             base.OnHide(isShutdown, userData);
         }
 
         protected override bool OnAttack()
         {
-            if (muzzle == null || projectilePrefab == null)
+            if (muzzle == null || GameEntry.Entity == null || GameEntry.DataTable == null)
             {
                 return false;
             }
 
-            Quaternion shotRotation = GetShotRotation();
-            GameObject projectile = Instantiate(projectilePrefab, muzzle.position, shotRotation);
-            LastProjectile = projectile;
-
-            Rigidbody projectileBody = projectile.GetComponent<Rigidbody>();
-            if (projectileBody != null)
+            if (string.IsNullOrEmpty(bulletEntityGroupName) ||
+                GameEntry.Entity.GetEntityGroup(bulletEntityGroupName) == null)
             {
-                projectileBody.linearVelocity = shotRotation * Vector3.forward * WeaponData.BulletSpeed;
+                Log.Error("Bullet entity group '{0}' does not exist.", bulletEntityGroupName);
+                return false;
             }
 
-            ProjectileSpawned?.Invoke(projectile, this);
+            IDataTable<DREntity> entityTable = GameEntry.DataTable.GetDataTable<DREntity>();
+            DREntity bulletEntityConfig = entityTable?.GetDataRow(WeaponData.BulletEntityId);
+            if (bulletEntityConfig == null || string.IsNullOrEmpty(bulletEntityConfig.AssetName))
+            {
+                Log.Error("Bullet entity data row '{0}' is invalid.", WeaponData.BulletEntityId);
+                return false;
+            }
+
+            int bulletEntityId = GenerateBulletEntityId();
+            Quaternion shotRotation = GetShotRotation();
+            BulletEntityData bulletData = new BulletEntityData(
+                bulletEntityId,
+                WeaponData.BulletEntityId,
+                Owner.gameObject,
+                gameObject,
+                Owner.Owner.Faction,
+                WeaponData.Attack,
+                WeaponData.BulletSpeed,
+                bulletLifetime,
+                WeaponData.PenetrationCount,
+                muzzle.position,
+                shotRotation,
+                bulletCollisionRadius,
+                bulletHitLayer);
+
+            GameEntry.Entity.ShowEntity<BulletEntity>(
+                bulletEntityId,
+                AssetUtility.GetEntityAsset(bulletEntityConfig.AssetName),
+                bulletEntityGroupName,
+                bulletData);
+
+            LastBulletEntityId = bulletEntityId;
             return true;
         }
 
@@ -93,8 +139,25 @@ namespace ZombiesMustDie
                 return muzzle.rotation;
             }
 
-            Vector2 spread = UnityEngine.Random.insideUnitCircle * spreadAngle;
+            Vector2 spread = Random.insideUnitCircle * spreadAngle;
             return muzzle.rotation * Quaternion.Euler(-spread.y, spread.x, 0f);
+        }
+
+        private int GenerateBulletEntityId()
+        {
+            int entityId;
+            do
+            {
+                if (nextBulletEntityId == int.MinValue)
+                {
+                    nextBulletEntityId = 0;
+                }
+
+                entityId = --nextBulletEntityId;
+            }
+            while (GameEntry.Entity.HasEntity(entityId) || GameEntry.Entity.IsLoadingEntity(entityId));
+
+            return entityId;
         }
 
         private Transform ResolveChild(string relativePath)
