@@ -52,6 +52,9 @@ namespace ZombiesMustDie
         public void OnChooseLevelButtonClick()
         {
             Log.Info("点击了选择关卡按钮");
+
+            //!测试，直接进入游戏
+            m_ProcedureSelectCharacter.ChooseLevel();
         }
 
         public void OnBackToMenuButtonClick()

@@ -1,11 +1,4 @@
-﻿//------------------------------------------------------------
-// Game Framework
-// Copyright © 2013-2021 Jiang Yin. All rights reserved.
-// Homepage: https://gameframework.cn/
-// Feedback: mailto:ellan@gameframework.cn
-//------------------------------------------------------------
-
-using GameFramework.Procedure;
+﻿using GameFramework.Procedure;
 using GameFramework.DataTable;
 using GameFramework.Event;
 using UnityGameFramework.Runtime;
@@ -16,18 +9,11 @@ namespace ZombiesMustDie
     public class ProcedureChangeScene : ProcedureBase
     {
         private const int MenuSceneId = 1;
+        private const int MainSceneId = 2; //游戏主场景
 
         private bool m_ChangeToMenu = false;
         private bool m_IsChangeSceneComplete = false;
         private int m_BackgroundMusicId = 0;
-
-        // public override bool UseNativeDialog
-        // {
-        //     get
-        //     {
-        //         return false;
-        //     }
-        // }
 
         protected override void OnEnter(ProcedureOwner procedureOwner)
         {
@@ -121,8 +107,8 @@ namespace ZombiesMustDie
             }
             else
             {
-                //todo: 进入游戏主流程
-                // ChangeState<ProcedureMain>(procedureOwner);
+                //进入游戏主流程
+                ChangeState<ProcedureMain>(procedureOwner);
                 return;
             }
         }

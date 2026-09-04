@@ -245,7 +245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dab7f62ab579204c9336ba7f25f0600, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.CombatController
-  attackDamage: 5
+  attackDamage: 10
   meleeSphereCenter: {fileID: 1181689743990167807}
   meleeRadius: 0.6
   targetLayer:

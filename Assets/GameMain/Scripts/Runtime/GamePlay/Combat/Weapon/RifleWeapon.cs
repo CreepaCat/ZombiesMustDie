@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace ZombiesMustDie
 {
     /// <summary>
@@ -7,6 +9,7 @@ namespace ZombiesMustDie
     {
         public bool Fire()
         {
+            Debug.Log("尝试开火" + TryAttack());
             return TryAttack();
         }
     }

@@ -5,6 +5,7 @@ namespace ZombiesMustDie
     /// <summary>
     /// 实体数据。
     /// </summary>
+    [System.Serializable]
     public abstract class EntityData
     {
 

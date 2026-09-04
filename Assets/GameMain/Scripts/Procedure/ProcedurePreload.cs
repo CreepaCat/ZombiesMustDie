@@ -85,7 +85,7 @@ namespace ZombiesMustDie
                 }
             }
 
-            procedureOwner.SetData<VarInt32>("NextSceneId", GameEntry.Config.GetInt("Scene.StartMenu"));
+            procedureOwner.SetData<VarInt32>("NextSceneId", GameEntry.Config.GetInt("Scene.StartMenu", 1));
             ChangeState<ProcedureChangeScene>(procedureOwner);
         }
 

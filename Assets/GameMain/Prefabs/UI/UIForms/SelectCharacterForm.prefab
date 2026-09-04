@@ -837,7 +837,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 989261009739792619, guid: 599843390d188da46a5e25111d79232c, type: 3}
       propertyPath: m_text
-      value: "\u9009\u62E9\u5173\u5361"
+      value: "[TEST]\n\u8FDB\u5165\u6E38\u620F"
+      objectReference: {fileID: 0}
+    - target: {fileID: 989261009739792619, guid: 599843390d188da46a5e25111d79232c, type: 3}
+      propertyPath: m_fontSize
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 989261009739792619, guid: 599843390d188da46a5e25111d79232c, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 989261009739792619, guid: 599843390d188da46a5e25111d79232c, type: 3}
       propertyPath: m_HorizontalAlignment

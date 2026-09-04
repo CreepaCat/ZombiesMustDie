@@ -10,7 +10,7 @@ namespace ZombiesMustDie
     {
 
         private bool m_BackToMenu = false;
-        private bool m_ChooseLevel = false;
+        private bool m_ChooseLevel = false;//关卡选择
         private MenuCameraTurnDirection m_TurnDirection = MenuCameraTurnDirection.Right;
         private SelectCharacterForm m_SelectCharacterForm = null;
 
@@ -23,6 +23,15 @@ namespace ZombiesMustDie
             m_BackToMenu = true;
 
             m_TurnDirection = turnDirection;
+        }
+
+        public void ChooseLevel()
+        {
+            if (m_ChooseLevel) //防止重复调用
+            {
+                return;
+            }
+            m_ChooseLevel = true;
         }
 
         protected override void OnEnter(ProcedureOwner procedureOwner)
@@ -51,6 +60,16 @@ namespace ZombiesMustDie
                     (int)m_TurnDirection);
 
                 ChangeState<ProcedureTurnMenuCam>(procedureOwner);
+            }
+
+            if (m_ChooseLevel)
+            {
+                Log.Info("进入游戏");
+                //测试，当前不进入管卡选择界面，直接进入游戏Main场景
+                procedureOwner.SetData<VarInt32>(
+                "NextSceneId",
+                GameEntry.Config.GetInt("Scene.Main", 2));
+                ChangeState<ProcedureChangeScene>(procedureOwner);
             }
         }
 

@@ -65,6 +65,7 @@ GameObject:
   - component: {fileID: 6682699295859183569}
   - component: {fileID: 1778841113900466533}
   - component: {fileID: 1190202079380673128}
+  - component: {fileID: 8341177056197257432}
   m_Layer: 7
   m_Name: PlayerAmature
   m_TagString: Player
@@ -209,8 +210,20 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 0
-  weaponSocket: {fileID: 0}
-  equippedWeapon: {fileID: 0}
+  weaponSocket: {fileID: 2258796516870558600}
+  equippedWeapon: {fileID: 798495187810223656}
+--- !u!114 &8341177056197257432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1687364748778691635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7cdf690c436b4944b5dce5bf9724ad2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.PlayerAnimation
 --- !u!1 &2907479834492189687
 GameObject:
   m_ObjectHideFlags: 0
@@ -865,6 +878,16 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c1c9b2bd9a9fe7449adbbff6a2a7ec5, type: 3}
+--- !u!1 &798495187810223656 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1818775653817890450, guid: 9c1c9b2bd9a9fe7449adbbff6a2a7ec5, type: 3}
+  m_PrefabInstance: {fileID: 1308654092473086138}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2258796516870558600 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 968729668734526258, guid: 9c1c9b2bd9a9fe7449adbbff6a2a7ec5, type: 3}
+  m_PrefabInstance: {fileID: 1308654092473086138}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6910886541132431909 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5602798200290423455, guid: 9c1c9b2bd9a9fe7449adbbff6a2a7ec5, type: 3}
