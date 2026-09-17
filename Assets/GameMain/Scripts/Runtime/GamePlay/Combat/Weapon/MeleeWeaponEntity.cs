@@ -73,7 +73,7 @@ namespace ZombiesMustDie
             base.OnHide(isShutdown, userData);
         }
 
-        protected override bool OnAttack()
+        protected override bool OnAttack(in AttackRequest request)
         {
             if (attackOrigin == null || attackRadius <= 0f)
             {

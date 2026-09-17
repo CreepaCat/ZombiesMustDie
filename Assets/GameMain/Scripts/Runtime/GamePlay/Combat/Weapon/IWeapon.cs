@@ -17,6 +17,10 @@ namespace ZombiesMustDie
         void Equip(CombatController owner);
         void Unequip();
         bool TryAttack();
+        bool TryAttack(in AttackRequest request);
+        bool TryReload(float duration);
+        int CurrentMagazineAmmo { get; }
+        bool IsReloading { get; }
         void ResetCooldown();
     }
 }

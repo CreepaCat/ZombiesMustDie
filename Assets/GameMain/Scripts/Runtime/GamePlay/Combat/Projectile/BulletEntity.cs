@@ -14,7 +14,7 @@ namespace ZombiesMustDie
 
         private static readonly RaycastHitDistanceComparer HitComparer = new RaycastHitDistanceComparer();
 
-        private readonly RaycastHit[] hitBuffer = new RaycastHit[HitBufferSize];
+        private RaycastHit[] hitBuffer = new RaycastHit[HitBufferSize];
         private readonly HashSet<CombatTarget> hitTargets = new HashSet<CombatTarget>();
 
         private BulletEntityData bulletData;
@@ -85,14 +85,19 @@ namespace ZombiesMustDie
         private void MoveAndDetectHits(float moveDistance)
         {
             Vector3 origin = CachedTransform.position;
-            int hitCount = Physics.SphereCastNonAlloc(
+            int hitCount;
+            // Saturation otherwise permits a nearer wall to be omitted from the results.
+            while ((hitCount = Physics.SphereCastNonAlloc(
                 origin,
                 bulletData.CollisionRadius,
                 direction,
                 hitBuffer,
                 moveDistance,
                 bulletData.HitLayer,
-                bulletData.TriggerInteraction);
+                bulletData.TriggerInteraction)) == hitBuffer.Length)
+            {
+                Array.Resize(ref hitBuffer, hitBuffer.Length * 2);
+            }
 
             if (hitCount > 1)
             {

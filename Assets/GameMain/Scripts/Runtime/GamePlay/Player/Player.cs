@@ -7,6 +7,7 @@ namespace ZombiesMustDie
     /// </summary>
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(PlayerAnimation))]
+    [RequireComponent(typeof(CombatController), typeof(PlayerCombat))]
     public class Player : MonoBehaviour
     {
         [SerializeField] InputReader input;
@@ -15,6 +16,8 @@ namespace ZombiesMustDie
         private PlayerAnimation m_Animation;
         private CharacterController m_Controller;
         private Health m_Health;
+        public CombatController Combat { get; private set; }
+        public PlayerCombat PlayerCombat { get; private set; }
 
 
         //Getters
@@ -41,6 +44,8 @@ namespace ZombiesMustDie
             m_Animation = GetComponent<PlayerAnimation>();
             m_Controller = GetComponent<CharacterController>();
             m_Health = GetComponent<Health>();
+            Combat = GetComponent<CombatController>();
+            PlayerCombat = GetComponent<PlayerCombat>();
             if (m_Animation == null)
             {
                 Debug.LogError("Player Animator is null");

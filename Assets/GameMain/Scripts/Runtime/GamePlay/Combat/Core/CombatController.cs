@@ -117,7 +117,19 @@ namespace ZombiesMustDie
 
         public bool TryAttack()
         {
-            return currentWeapon != null && currentWeapon.TryAttack();
+            return TryAttack(default);
+        }
+
+        public bool TryAttack(in AttackRequest request)
+        {
+            return isActiveAndEnabled && !Owner.IsDead && currentWeapon != null &&
+                currentWeapon.TryAttack(in request);
+        }
+
+        public bool TryReload(float duration)
+        {
+            return isActiveAndEnabled && !Owner.IsDead && currentWeapon != null &&
+                currentWeapon.TryReload(duration);
         }
 
         private void ClearCurrentWeapon()

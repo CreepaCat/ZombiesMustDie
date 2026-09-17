@@ -19,7 +19,8 @@ namespace ZombiesMustDie
             float bulletLifetime = 5f,
             float bulletCollisionRadius = 0.05f,
             int bulletHitLayerMask = -1,
-            DRWeapon weaponConfig = null)
+            DRWeapon weaponConfig = null,
+            QueryTriggerInteraction triggerInteraction = QueryTriggerInteraction.Collide)
             : base(entityId, entityTypeId, weaponId, owner, weaponConfig)
         {
             MuzzlePath = muzzlePath;
@@ -27,6 +28,7 @@ namespace ZombiesMustDie
             BulletLifetime = Mathf.Max(0.01f, bulletLifetime);
             BulletCollisionRadius = Mathf.Max(0.001f, bulletCollisionRadius);
             BulletHitLayer = bulletHitLayerMask;
+            TriggerInteraction = triggerInteraction;
         }
 
         public string MuzzlePath { get; }
@@ -34,6 +36,7 @@ namespace ZombiesMustDie
         public float BulletLifetime { get; }
         public float BulletCollisionRadius { get; }
         public LayerMask BulletHitLayer { get; }
+        public QueryTriggerInteraction TriggerInteraction { get; }
     }
 
     /// <summary>
@@ -48,6 +51,7 @@ namespace ZombiesMustDie
         private float bulletLifetime;
         private float bulletCollisionRadius;
         private LayerMask bulletHitLayer;
+        private QueryTriggerInteraction triggerInteraction;
 
         public int LastBulletEntityId { get; private set; }
 
@@ -67,6 +71,7 @@ namespace ZombiesMustDie
             bulletLifetime = entityData.BulletLifetime;
             bulletCollisionRadius = entityData.BulletCollisionRadius;
             bulletHitLayer = entityData.BulletHitLayer;
+            triggerInteraction = entityData.TriggerInteraction;
             LastBulletEntityId = 0;
         }
 
@@ -82,7 +87,7 @@ namespace ZombiesMustDie
             base.OnHide(isShutdown, userData);
         }
 
-        protected override bool OnAttack()
+        protected override bool OnAttack(in AttackRequest request)
         {
             if (muzzle == null || GameEntry.Entity == null || GameEntry.DataTable == null)
             {
@@ -105,7 +110,7 @@ namespace ZombiesMustDie
             }
 
             int bulletEntityId = GenerateBulletEntityId();
-            Quaternion shotRotation = GetShotRotation();
+            Quaternion shotRotation = GetShotRotation(in request);
             BulletEntityData bulletData = new BulletEntityData(
                 bulletEntityId,
                 WeaponData.BulletEntityId,
@@ -119,7 +124,8 @@ namespace ZombiesMustDie
                 muzzle.position,
                 shotRotation,
                 bulletCollisionRadius,
-                bulletHitLayer);
+                bulletHitLayer,
+                triggerInteraction);
 
             GameEntry.Entity.ShowEntity<BulletEntity>(
                 bulletEntityId,
@@ -131,16 +137,19 @@ namespace ZombiesMustDie
             return true;
         }
 
-        private Quaternion GetShotRotation()
+        private Quaternion GetShotRotation(in AttackRequest request)
         {
+            Vector3 direction = request.HasAimPoint ? request.AimPoint - muzzle.position : request.AimDirection;
+            Quaternion rotation = direction.sqrMagnitude > 0.000001f
+                ? Quaternion.LookRotation(direction.normalized) : muzzle.rotation;
             float spreadAngle = Mathf.Max(0f, WeaponData.SpreadAngle);
             if (spreadAngle <= 0f)
             {
-                return muzzle.rotation;
+                return rotation;
             }
 
             Vector2 spread = Random.insideUnitCircle * spreadAngle;
-            return muzzle.rotation * Quaternion.Euler(-spread.y, spread.x, 0f);
+            return rotation * Quaternion.Euler(-spread.y, spread.x, 0f);
         }
 
         private int GenerateBulletEntityId()
