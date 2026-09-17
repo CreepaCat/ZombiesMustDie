@@ -88,9 +88,9 @@ namespace ZombiesMustDie
 
         private void UpdateAnimator(float velocity, float speedx, float speedz)
         {
-            animator.SetFloat(PlayerAnimationParamConfig.Param_Velocity, velocity);
-            animator.SetFloat(PlayerAnimationParamConfig.Param_SpeedX, speedx);
-            animator.SetFloat(PlayerAnimationParamConfig.Param_SpeedZ, speedz);
+            animator.SetFloat(PlayerAnimationParamConfig.Param_f_Velocity, velocity);
+            animator.SetFloat(PlayerAnimationParamConfig.Param_f_SpeedX, speedx);
+            animator.SetFloat(PlayerAnimationParamConfig.Param_f_SpeedZ, speedz);
         }
 
         /// <summary>

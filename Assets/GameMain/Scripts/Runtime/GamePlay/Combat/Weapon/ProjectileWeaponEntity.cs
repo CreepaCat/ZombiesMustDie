@@ -89,10 +89,10 @@ namespace ZombiesMustDie
 
         protected override bool OnAttack(in AttackRequest request)
         {
-            if (muzzle == null || GameEntry.Entity == null || GameEntry.DataTable == null)
-            {
-                return false;
-            }
+            // if (muzzle == null || GameEntry.Entity == null || GameEntry.DataTable == null)
+            // {
+            //     return false;
+            // }
 
             if (string.IsNullOrEmpty(bulletEntityGroupName) ||
                 GameEntry.Entity.GetEntityGroup(bulletEntityGroupName) == null)

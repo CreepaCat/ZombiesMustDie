@@ -18,8 +18,8 @@ namespace ZombiesMustDie
         [SerializeField] private LayerMask targetLayer;
 
         [Header("武器")]
-        [SerializeField] private Transform weaponSocket;
-        [SerializeField] private GameObject equippedWeapon;
+        [SerializeField] private Transform weaponSocket; //武器容器
+        private GameObject equippedWeapon; //当前装备的武器
 
         private readonly Collider[] hitBuffer = new Collider[HitBufferSize];
         private readonly HashSet<CombatTarget> hitTargets = new HashSet<CombatTarget>();

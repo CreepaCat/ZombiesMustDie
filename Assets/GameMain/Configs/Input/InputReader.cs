@@ -15,7 +15,7 @@ public class InputReader : ScriptableObject, IPlayerActions
     public event Action Interact = delegate { };
     public event Action Attack = delegate { };
     public event Action<bool> AttackHeld = delegate { };
-    //public event Action ChargeAttack = delegate { }; //重攻击
+    public event Action Reload = delegate { };
 
 
     PlayerInputActions inputActions;
@@ -36,6 +36,7 @@ public class InputReader : ScriptableObject, IPlayerActions
     public void EnablePlayerActions()
     {
         inputActions.Enable();
+        Debug.Log("玩家输入已启用");
     }
 
     public void EnablePlayerControl()
@@ -51,12 +52,21 @@ public class InputReader : ScriptableObject, IPlayerActions
     {
         if (context.phase == InputActionPhase.Started)
         {
+            Debug.Log("玩家输入攻击");
             AttackHeld.Invoke(true);
             Attack.Invoke();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
             AttackHeld.Invoke(false);
+        }
+    }
+
+    public void OnReload(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            Reload.Invoke();
         }
     }
 

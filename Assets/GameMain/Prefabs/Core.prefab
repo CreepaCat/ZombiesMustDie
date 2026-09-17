@@ -61,11 +61,15 @@ GameObject:
   - component: {fileID: 6648587236194828450}
   - component: {fileID: 5944910494864987224}
   - component: {fileID: 243572157195687048}
-  - component: {fileID: 8395066062435620678}
+  - component: {fileID: 8341177056197257432}
+  - component: {fileID: 6398866726242949460}
   - component: {fileID: 6682699295859183569}
+  - component: {fileID: 8395066062435620678}
   - component: {fileID: 1778841113900466533}
   - component: {fileID: 1190202079380673128}
-  - component: {fileID: 8341177056197257432}
+  - component: {fileID: 3179748497006689978}
+  - component: {fileID: 5029656458763798}
+  - component: {fileID: 8035873085066376827}
   m_Layer: 7
   m_Name: PlayerAmature
   m_TagString: Player
@@ -149,6 +153,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   input: {fileID: 11400000, guid: 9d6fcbd30f32b3248a645d61de34bc6b, type: 2}
+--- !u!114 &8341177056197257432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1687364748778691635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7cdf690c436b4944b5dce5bf9724ad2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.PlayerAnimation
+--- !u!114 &6398866726242949460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1687364748778691635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a9172b05f486004f9646effb3a617ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.PlayerAnimationEventHandler
+--- !u!114 &6682699295859183569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1687364748778691635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59d3c9fadf3ba4b46825c60b151bdabd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Health
+  maxHealth: 100
 --- !u!114 &8395066062435620678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,19 +207,6 @@ MonoBehaviour:
   moveInputChangeSpeed: 6
   groundStickSpeed: 10
   cameraRoot: {fileID: 7510293825731254347}
---- !u!114 &6682699295859183569
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1687364748778691635}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59d3c9fadf3ba4b46825c60b151bdabd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Health
-  maxHealth: 100
 --- !u!114 &1778841113900466533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,10 +237,9 @@ MonoBehaviour:
   meleeRadius: 0
   targetLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   weaponSocket: {fileID: 2258796516870558600}
-  equippedWeapon: {fileID: 798495187810223656}
---- !u!114 &8341177056197257432
+--- !u!114 &3179748497006689978
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -221,9 +248,77 @@ MonoBehaviour:
   m_GameObject: {fileID: 1687364748778691635}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7cdf690c436b4944b5dce5bf9724ad2, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d0c907bb63207440a3221630353b2f7, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.PlayerAnimation
+  m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.PlayerAimProvider
+--- !u!114 &5029656458763798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1687364748778691635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7424c54027d44b45b96ba0da03e29bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.PlayerCombat
+  input: {fileID: 11400000, guid: 9d6fcbd30f32b3248a645d61de34bc6b, type: 2}
+  fireMode: 0
+  allowAttack: 1
+  reloadDuration: 1.5
+  onFired:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8341177056197257432}
+        m_TargetAssemblyTypeName: ZombiesMustDie.PlayerAnimation, Assembly-CSharp
+        m_MethodName: PlayFire
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onReloadStarted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8341177056197257432}
+        m_TargetAssemblyTypeName: ZombiesMustDie.PlayerAnimation, Assembly-CSharp
+        m_MethodName: PlayReload
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &8035873085066376827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1687364748778691635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edd3a7a07187ed24f9023e2b50069616, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.PlayerWeaponEquipment
+  characterId: 1
+  weaponEntityGroup: Weapon
+  muzzlePath: Muzzle
+  bulletEntityGroup: Bullet
+  bulletLifetime: 5
+  bulletCollisionRadius: 0.05
+  bulletHitLayer:
+    serializedVersion: 2
+    m_Bits: 257
+  triggerInteraction: 2
 --- !u!1 &2907479834492189687
 GameObject:
   m_ObjectHideFlags: 0
@@ -874,15 +969,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4712306413897678859, guid: 9c1c9b2bd9a9fe7449adbbff6a2a7ec5, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1818775653817890450, guid: 9c1c9b2bd9a9fe7449adbbff6a2a7ec5, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c1c9b2bd9a9fe7449adbbff6a2a7ec5, type: 3}
---- !u!1 &798495187810223656 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1818775653817890450, guid: 9c1c9b2bd9a9fe7449adbbff6a2a7ec5, type: 3}
-  m_PrefabInstance: {fileID: 1308654092473086138}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2258796516870558600 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 968729668734526258, guid: 9c1c9b2bd9a9fe7449adbbff6a2a7ec5, type: 3}

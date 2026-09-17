@@ -36,6 +36,7 @@ namespace ZombiesMustDie
             if (subscribedInput == null) return;
             subscribedInput.Attack += OnFirePressed;
             subscribedInput.AttackHeld += OnFireHeld;
+            subscribedInput.Reload += Reload;
         }
 
         private void OnDisable()
@@ -44,6 +45,7 @@ namespace ZombiesMustDie
             {
                 subscribedInput.Attack -= OnFirePressed;
                 subscribedInput.AttackHeld -= OnFireHeld;
+                subscribedInput.Reload -= Reload;
             }
             subscribedInput = null;
             fireHeld = false;
@@ -69,6 +71,7 @@ namespace ZombiesMustDie
 
         public bool TryFire()
         {
+            Debug.Log("player try fire");
             if (!isActiveAndEnabled || !allowAttack || Time.timeScale <= 0f || combat.Owner.IsDead ||
                 lastAttemptFrame == Time.frameCount || combat.CurrentWeapon == null) return false;
             lastAttemptFrame = Time.frameCount;

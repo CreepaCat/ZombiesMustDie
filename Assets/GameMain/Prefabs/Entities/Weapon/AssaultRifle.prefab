@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6656783383871647432}
   - component: {fileID: 4540837150668666521}
   m_Layer: 0
-  m_Name: weapon_assault_rifle_A
+  m_Name: AssaultRifle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,11 +27,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5008274665698748709}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.70710677, y: -0.000000084293696, z: -0.000000022476454, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8106162200740553926}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3095018669072754094
@@ -103,3 +104,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc76f9d1fb914f247acab0a8f907afc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.RifleWeapon
+--- !u!1 &8855611144456115847
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8106162200740553926}
+  m_Layer: 0
+  m_Name: Muzzle
+  m_TagString: Untagged
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8106162200740553926
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8855611144456115847}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -1.319, y: -0.09, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 639643399465158548}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}

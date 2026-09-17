@@ -44,6 +44,7 @@ namespace ZombiesMustDie
 
         public bool TryEquipDefaultWeapon()
         {
+            Debug.Log("PlayerWeaponEquipment TryEquipDefaultWeapon");
             if (!isActiveAndEnabled || combat.Owner.IsDead || weaponEntityId != 0 ||
                 combat.CurrentWeapon != null || GameEntry.Entity == null ||
                 GameEntry.DataTable == null || GameEntry.Event == null) return false;

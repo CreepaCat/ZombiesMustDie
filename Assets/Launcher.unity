@@ -627,6 +627,10 @@ PrefabInstance:
       propertyPath: m_EntityGroups.Array.data[2].m_InstanceAutoReleaseInterval
       value: 60
       objectReference: {fileID: 0}
+    - target: {fileID: 11499388, guid: adb3eb1c35fcff14f89fba7b05c9d71c, type: 3}
+      propertyPath: m_FrameRate
+      value: 60
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
