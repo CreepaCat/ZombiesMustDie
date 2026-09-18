@@ -10,6 +10,7 @@ namespace ZombiesMustDie
         public override void OnEnter()
         {
             Debug.Log("OnEnter Enemy_Death");
+            Enemy.Navigation.StopMoving();
             Enemy.Animation.PlayDeath();
         }
 

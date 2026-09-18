@@ -3,7 +3,7 @@
 #	Id	Name		EntityId	SoundId	BulletEntityId	Attack	BulletSpeed	FireInterval	MagazineSize	SpreadAngle	PenetrationCount
 #	0	null		0	0	0	0	0	0	0	0	0
 #	武器编号	名称	策划备注	武器实体编号	开火音效编号	子弹实体编号	攻击力	子弹速度	射击间隔	弹匣容量	散布角度	穿透数量
-	1	EngineerWeapon	扳手	20001	20001	30001	18	24	0.25	30	1.5	0
-	2	SniperRifle	狙击步枪	20002	20002	30001	90	45	1.2	5	0	2
-	3	AssaultRifle	突击步枪	20003	20003	30001	25	32	0.12	40	3	0
-	101	EnemyRifle	敌人步枪	20101	20101	30002	12	20	0.6	0	4	0
+	1	EngineerWeapon	扳手	20001	20001	30001	18	80	0.25	30	1.5	0
+	2	SniperRifle	狙击步枪	20002	20002	30001	90	150	1.2	5	0	2
+	3	AssaultRifle	突击步枪	20003	20003	30001	25	100	0.12	40	3	0
+	101	EnemyRifle	敌人步枪	20101	20101	30002	12	60	0.6	0	4	0

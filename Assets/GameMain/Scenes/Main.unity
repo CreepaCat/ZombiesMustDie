@@ -100370,6 +100370,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8096832573613200562, guid: 57cd33ac4e2dac34a8282943e68ceca4, type: 3}
+      propertyPath: m_Constraints
+      value: 126
+      objectReference: {fileID: 0}
+    - target: {fileID: 8096832573613200562, guid: 57cd33ac4e2dac34a8282943e68ceca4, type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8331815165574962788, guid: 57cd33ac4e2dac34a8282943e68ceca4, type: 3}
       propertyPath: m_Name
       value: EnemyModels
@@ -100426,6 +100434,14 @@ PrefabInstance:
     - target: {fileID: 416822986854476275, guid: 9e60c90cb76ce694b8c7d0704dbf3294, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6648587236194828450, guid: 9e60c90cb76ce694b8c7d0704dbf3294, type: 3}
+      propertyPath: m_SlopeLimit
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 6648587236194828450, guid: 9e60c90cb76ce694b8c7d0704dbf3294, type: 3}
+      propertyPath: m_StepOffset
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 7690565378759937667, guid: 9e60c90cb76ce694b8c7d0704dbf3294, type: 3}
       propertyPath: m_Name
