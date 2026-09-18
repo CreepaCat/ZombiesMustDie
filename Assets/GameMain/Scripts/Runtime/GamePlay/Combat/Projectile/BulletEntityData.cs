@@ -34,8 +34,10 @@ namespace ZombiesMustDie
             CollisionRadius = Mathf.Max(0.001f, collisionRadius);
             HitLayer = hitLayer;
             TriggerInteraction = triggerInteraction;
+            // Entity.OnShow applies this pose in the Bullet entity group's local space.
             Position = position;
             Rotation = rotation;
+            // Keep direction in the same local space as the rotation.
             Direction = rotation * Vector3.forward;
         }
 

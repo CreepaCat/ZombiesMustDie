@@ -38,8 +38,11 @@ namespace ZombiesMustDie
                 return;
             }
 
-            direction = bulletData.Direction.sqrMagnitude > 0f
-                ? bulletData.Direction.normalized
+            Vector3 localDirection = bulletData.Direction;
+            direction = localDirection.sqrMagnitude > 0f
+                ? (CachedTransform.parent != null
+                    ? CachedTransform.parent.TransformDirection(localDirection).normalized
+                    : localDirection.normalized)
                 : CachedTransform.forward;
             elapsedLifetime = 0f;
             remainingPenetrations = bulletData.PenetrationCount;

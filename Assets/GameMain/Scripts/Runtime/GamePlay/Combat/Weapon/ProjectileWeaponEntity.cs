@@ -1,4 +1,5 @@
 using GameFramework.DataTable;
+using GameFramework.Entity;
 using UnityEngine;
 using UnityGameFramework.Runtime;
 
@@ -94,8 +95,11 @@ namespace ZombiesMustDie
             //     return false;
             // }
 
-            if (string.IsNullOrEmpty(bulletEntityGroupName) ||
-                GameEntry.Entity.GetEntityGroup(bulletEntityGroupName) == null)
+            IEntityGroup bulletEntityGroup = string.IsNullOrEmpty(bulletEntityGroupName)
+                ? null
+                : GameEntry.Entity.GetEntityGroup(bulletEntityGroupName);
+            Transform bulletParent = (bulletEntityGroup?.Helper as Component)?.transform;
+            if (bulletParent == null)
             {
                 Log.Error("Bullet entity group '{0}' does not exist.", bulletEntityGroupName);
                 return false;
@@ -110,7 +114,9 @@ namespace ZombiesMustDie
             }
 
             int bulletEntityId = GenerateBulletEntityId();
-            Quaternion shotRotation = GetShotRotation(in request);
+            Quaternion shotWorldRotation = GetShotRotation(in request);
+            Vector3 bulletLocalPosition = bulletParent.InverseTransformPoint(muzzle.position);
+            Quaternion bulletLocalRotation = Quaternion.Inverse(bulletParent.rotation) * shotWorldRotation;
             BulletEntityData bulletData = new BulletEntityData(
                 bulletEntityId,
                 WeaponData.BulletEntityId,
@@ -121,8 +127,8 @@ namespace ZombiesMustDie
                 WeaponData.BulletSpeed,
                 bulletLifetime,
                 WeaponData.PenetrationCount,
-                muzzle.position,
-                shotRotation,
+                bulletLocalPosition,
+                bulletLocalRotation,
                 bulletCollisionRadius,
                 bulletHitLayer,
                 triggerInteraction);
