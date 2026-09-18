@@ -44,23 +44,23 @@ namespace ZombiesMustDie
             s_MusicSerialId = null;
         }
 
-        // public static int? PlaySound(this SoundComponent soundComponent, int soundId, Entity bindingEntity = null, object userData = null)
-        // {
-        //     IDataTable<DRSound> dtSound = GameEntry.DataTable.GetDataTable<DRSound>();
-        //     DRSound drSound = dtSound.GetDataRow(soundId);
-        //     if (drSound == null)
-        //     {
-        //         Log.Warning("Can not load sound '{0}' from data table.", soundId.ToString());
-        //         return null;
-        //     }
+        public static int? PlaySound(this SoundComponent soundComponent, int soundId, Entity bindingEntity = null, object userData = null)
+        {
+            IDataTable<DRSound> dtSound = GameEntry.DataTable.GetDataTable<DRSound>();
+            DRSound drSound = dtSound.GetDataRow(soundId);
+            if (drSound == null)
+            {
+                Log.Warning("Can not load sound '{0}' from data table.", soundId.ToString());
+                return null;
+            }
 
-        //     PlaySoundParams playSoundParams = PlaySoundParams.Create();
-        //     playSoundParams.Priority = drSound.Priority;
-        //     playSoundParams.Loop = drSound.Loop;
-        //     playSoundParams.VolumeInSoundGroup = drSound.Volume;
-        //     playSoundParams.SpatialBlend = drSound.SpatialBlend;
-        //     return soundComponent.PlaySound(AssetUtility.GetSoundAsset(drSound.AssetName), "Sound", Constant.AssetPriority.SoundAsset, playSoundParams, bindingEntity != null ? bindingEntity.Entity : null, userData);
-        // }
+            PlaySoundParams playSoundParams = PlaySoundParams.Create();
+            playSoundParams.Priority = drSound.Priority;
+            playSoundParams.Loop = drSound.Loop;
+            playSoundParams.VolumeInSoundGroup = drSound.Volume;
+            playSoundParams.SpatialBlend = drSound.SpatialBlend;
+            return soundComponent.PlaySound(AssetUtility.GetSoundAsset(drSound.AssetName), "Sound", 0, playSoundParams, bindingEntity != null ? bindingEntity.Entity : null, userData);
+        }
 
         // public static int? PlayUISound(this SoundComponent soundComponent, int uiSoundId, object userData = null)
         // {

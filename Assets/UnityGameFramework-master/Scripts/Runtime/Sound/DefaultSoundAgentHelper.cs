@@ -51,15 +51,30 @@ namespace UnityGameFramework.Runtime
         /// <summary>
         /// 获取或设置播放位置。
         /// </summary>
+        // public override float Time
+        // {
+        //     get
+        //     {
+        //         return m_AudioSource.time;
+        //     }
+        //     set
+        //     {
+        //         m_AudioSource.time = value;
+        //     }
+        // }
+
         public override float Time
         {
             get
             {
-                return m_AudioSource.time;
+                return m_AudioSource.clip != null ? m_AudioSource.time : 0f;
             }
             set
             {
-                m_AudioSource.time = value;
+                if (m_AudioSource.clip != null)
+                {
+                    m_AudioSource.time = value;
+                }
             }
         }
 

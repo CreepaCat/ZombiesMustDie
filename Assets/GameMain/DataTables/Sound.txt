@@ -1,0 +1,8 @@
+#	音效表
+#	int	string		int	bool	float	float	float
+#	Id	AssetName		Priority	Loop	Volume	SpatialBlend	MaxDistance
+#	0	null		0
+#	音效编号	资源名称	策划备注	优先级	是否循环	音量(0~1)	空间混合	声音最大距离
+	10000	bullet_hit_body	子弹命中肉体	0	FALSE	1	0	100
+	10001	bullet_hit_rock	子弹命中石头	0	FALSE	1	0	100
+	20003	rifle_shoot	自动步枪开火	0	FALSE	1	0	100

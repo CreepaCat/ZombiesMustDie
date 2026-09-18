@@ -140,8 +140,10 @@ namespace ZombiesMustDie
                 bulletEntityGroupName,
                 bulletData);
             // Debug.LogFormat($"show bullet:{0}, id:{1}", WeaponData.BulletEntityId, bulletEntityId);
-
             LastBulletEntityId = bulletEntityId;
+
+            //播放开火音效
+            GameEntry.Sound.PlaySound(WeaponData.SoundId);
             return true;
         }
 

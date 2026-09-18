@@ -1,18 +1,17 @@
 using System.IO;
 using System.Text;
 using UnityGameFramework.Runtime;
-
 namespace ZombiesMustDie
 {
     /// <summary>
-    /// 音乐配置表。
+    /// 音效配置表
     /// </summary>
-    public class DRMusic : DataRowBase
+    public class DRSound : DataRowBase
     {
         private int m_Id = 0;
 
         /// <summary>
-        /// 获取音乐编号。
+        /// 获取音效编号。
         /// </summary>
         public override int Id
         {
@@ -31,6 +30,50 @@ namespace ZombiesMustDie
             private set;
         }
 
+        /// <summary>
+        /// 获取资源优先级。
+        /// </summary>
+        public int Priority
+        {
+            get;
+            private set;
+        }
+        /// <summary>
+        /// 是否循环
+        /// </summary>
+        public bool Loop
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 音量
+        /// </summary>
+        public float Volume
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 空间混合
+        /// </summary>
+        public float SpatialBlend
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 声音最大距离
+        /// </summary>
+        public float MaxDistance
+        {
+            get;
+            private set;
+        }
+
         public override bool ParseDataRow(string dataRowString, object userData)
         {
             string[] columnStrings = dataRowString.Split(DataTableExtension.DataSplitSeparators);
@@ -42,8 +85,13 @@ namespace ZombiesMustDie
             int index = 0;
             index++;
             m_Id = int.Parse(columnStrings[index++]);
-            index++;
             AssetName = columnStrings[index++];
+            index++;//跳过策划备注列
+            Priority = int.Parse(columnStrings[index++]);
+            Loop = bool.Parse(columnStrings[index++]);
+            Volume = float.Parse(columnStrings[index++]);
+            SpatialBlend = float.Parse(columnStrings[index++]);
+            MaxDistance = float.Parse(columnStrings[index++]);
 
             GeneratePropertyArray();
             return true;
@@ -57,6 +105,11 @@ namespace ZombiesMustDie
                 {
                     m_Id = binaryReader.Read7BitEncodedInt32();
                     AssetName = binaryReader.ReadString();
+                    Priority = binaryReader.Read7BitEncodedInt32();
+                    Loop = binaryReader.ReadBoolean();
+                    Volume = binaryReader.ReadSingle();
+                    SpatialBlend = binaryReader.ReadSingle();
+                    MaxDistance = binaryReader.ReadSingle();
                 }
             }
 

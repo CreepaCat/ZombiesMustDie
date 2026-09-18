@@ -23,6 +23,7 @@ namespace ZombiesMustDie
         public string Name { get; private set; }
 
         public int EntityId { get; private set; }
+        public int SoundId { get; private set; }
 
         public int BulletEntityId { get; private set; }
 
@@ -52,6 +53,7 @@ namespace ZombiesMustDie
             Name = columnStrings[index++];
             index++;
             EntityId = int.Parse(columnStrings[index++]);
+            SoundId = int.Parse(columnStrings[index++]);
             BulletEntityId = int.Parse(columnStrings[index++]);
             Attack = int.Parse(columnStrings[index++]);
             BulletSpeed = float.Parse(columnStrings[index++]);
@@ -73,6 +75,7 @@ namespace ZombiesMustDie
                     m_Id = binaryReader.Read7BitEncodedInt32();
                     Name = binaryReader.ReadString();
                     EntityId = binaryReader.Read7BitEncodedInt32();
+                    SoundId = binaryReader.Read7BitEncodedInt32();
                     BulletEntityId = binaryReader.Read7BitEncodedInt32();
                     Attack = binaryReader.Read7BitEncodedInt32();
                     BulletSpeed = binaryReader.ReadSingle();

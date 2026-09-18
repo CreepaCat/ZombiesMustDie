@@ -28,7 +28,7 @@ namespace ZombiesMustDie
             "Entity",
             "Music",
             "Scene",
-            // "Sound",
+            "Sound",
             // "Thruster",
             "UIForm",
             // "UISound",
