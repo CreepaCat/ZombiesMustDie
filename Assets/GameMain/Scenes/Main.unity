@@ -100431,6 +100431,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Core
       objectReference: {fileID: 0}
+    - target: {fileID: 8035873085066376827, guid: 9e60c90cb76ce694b8c7d0704dbf3294, type: 3}
+      propertyPath: bulletHitLayer.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

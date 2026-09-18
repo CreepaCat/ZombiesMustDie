@@ -27,7 +27,6 @@ namespace ZombiesMustDie
         public bool IsReady => Available && weaponData != null && owner != null &&
             owner.isActiveAndEnabled && !owner.Owner.IsDead /*&& !IsReloading &&
             (weaponData.MagazineSize <= 0 || CurrentMagazineAmmo > 0) && CooldownRemaining <= 0f*/;
-        //public bool IsReady => true;
 
         protected override void OnInit(object userData)
         {
@@ -138,7 +137,7 @@ namespace ZombiesMustDie
 
         public bool TryAttack(in AttackRequest request)
         {
-            if (Time.timeScale <= 0f /*|| !IsReady || !OnAttack(in request)*/)
+            if (Time.timeScale <= 0f || !IsReady || !OnAttack(in request))
             {
                 Debug.Log("武器没准备好");
                 return false;

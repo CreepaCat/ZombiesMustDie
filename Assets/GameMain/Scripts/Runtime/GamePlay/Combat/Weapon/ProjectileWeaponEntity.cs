@@ -90,10 +90,10 @@ namespace ZombiesMustDie
 
         protected override bool OnAttack(in AttackRequest request)
         {
-            // if (muzzle == null || GameEntry.Entity == null || GameEntry.DataTable == null)
-            // {
-            //     return false;
-            // }
+            if (muzzle == null || GameEntry.Entity == null || GameEntry.DataTable == null)
+            {
+                return false;
+            }
 
             IEntityGroup bulletEntityGroup = string.IsNullOrEmpty(bulletEntityGroupName)
                 ? null
@@ -115,6 +115,7 @@ namespace ZombiesMustDie
 
             int bulletEntityId = GenerateBulletEntityId();
             Quaternion shotWorldRotation = GetShotRotation(in request);
+            //子弹生成时的位置和旋转 以枪口坐标为准，转换到子弹池父对象
             Vector3 bulletLocalPosition = bulletParent.InverseTransformPoint(muzzle.position);
             Quaternion bulletLocalRotation = Quaternion.Inverse(bulletParent.rotation) * shotWorldRotation;
             BulletEntityData bulletData = new BulletEntityData(
@@ -138,6 +139,7 @@ namespace ZombiesMustDie
                 AssetUtility.GetEntityAsset(bulletEntityConfig.AssetName),
                 bulletEntityGroupName,
                 bulletData);
+            Debug.LogFormat($"show bullet:{0}, id:{1}", WeaponData.BulletEntityId, bulletEntityId);
 
             LastBulletEntityId = bulletEntityId;
             return true;

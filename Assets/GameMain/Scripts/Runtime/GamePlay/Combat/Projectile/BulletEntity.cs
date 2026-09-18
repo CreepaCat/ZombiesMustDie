@@ -138,6 +138,7 @@ namespace ZombiesMustDie
                     direction);
 
                 DamageResult result = target.TakeDamage(in damageInfo);
+                Debug.Log(target.transform + " TakeDamage " + bulletData.Damage);
                 if (!result.Succeeded)
                 {
                     continue;

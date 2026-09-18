@@ -80,6 +80,11 @@ namespace ZombiesMustDie
             return true;
         }
 
+        /// <summary>
+        /// 显示武器，当前开发中，武器直接显示在player模型的武器容器中
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void OnWeaponShown(object sender, GameEventArgs args)
         {
             var e = (ShowEntitySuccessEventArgs)args;
@@ -90,6 +95,7 @@ namespace ZombiesMustDie
                 return;
             }
             // Player currently is a MonoBehaviour. Use GF attachment when hosted by an Entity.
+            //todo:将player也作为Entity管理
             var parent = combat.GetComponentInParent<UnityGameFramework.Runtime.Entity>();
             if (parent != null)
                 GameEntry.Entity.AttachEntity(e.Entity, parent, combat.WeaponSocket);
