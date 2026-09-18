@@ -48,7 +48,7 @@ namespace ZombiesMustDie
             }
             else
             {
-                Debug.Log($"EnemyStateMachine中没有{stateType}状态");
+                Debug.LogError($"EnemyStateMachine中没有{stateType}状态");
             }
         }
     }

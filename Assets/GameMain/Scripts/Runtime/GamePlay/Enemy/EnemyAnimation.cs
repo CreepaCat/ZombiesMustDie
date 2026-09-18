@@ -35,5 +35,14 @@ namespace ZombiesMustDie
             return true;
         }
 
+        /// <summary>
+        /// 播放死亡动画
+        /// </summary>
+        public void PlayDeath()
+        {
+            m_Animator.SetBool(EnemyAnimationParamConfig.Param_IsInteracting, true);
+            m_Animator.CrossFade(EnemyAnimationParamConfig.Clip_Death, 0.2f);
+        }
+
     }
 }

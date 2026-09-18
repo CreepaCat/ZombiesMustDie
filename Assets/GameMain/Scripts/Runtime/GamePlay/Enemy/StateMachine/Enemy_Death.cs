@@ -1,0 +1,28 @@
+using UnityEngine;
+
+namespace ZombiesMustDie
+{
+    public class Enemy_Death : EnemyStateBase
+    {
+        public Enemy_Death(Enemy enemy) : base(enemy)
+        {
+        }
+        public override void OnEnter()
+        {
+            Debug.Log("OnEnter Enemy_Death");
+            Enemy.Animation.PlayDeath();
+        }
+
+        public override void OnLogicUpdate()
+        {
+
+        }
+
+        public override void OnExit()
+        {
+
+        }
+
+
+    }
+}

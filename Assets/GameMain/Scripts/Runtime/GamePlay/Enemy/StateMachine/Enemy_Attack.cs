@@ -26,7 +26,7 @@ namespace ZombiesMustDie
         public override void OnLogicUpdate()
         {
 
-            if (Enemy.Animation.IsInteracting) return;
+            if (Enemy.IsDead || Enemy.IsInteracting) return;
 
             if (CheckChangeState())
             {

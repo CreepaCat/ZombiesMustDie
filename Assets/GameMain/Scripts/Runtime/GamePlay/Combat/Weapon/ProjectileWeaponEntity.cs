@@ -139,7 +139,7 @@ namespace ZombiesMustDie
                 AssetUtility.GetEntityAsset(bulletEntityConfig.AssetName),
                 bulletEntityGroupName,
                 bulletData);
-            Debug.LogFormat($"show bullet:{0}, id:{1}", WeaponData.BulletEntityId, bulletEntityId);
+            // Debug.LogFormat($"show bullet:{0}, id:{1}", WeaponData.BulletEntityId, bulletEntityId);
 
             LastBulletEntityId = bulletEntityId;
             return true;

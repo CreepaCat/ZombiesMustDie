@@ -8,6 +8,7 @@ namespace ZombiesMustDie
     [RequireComponent(typeof(EnemyNavigation))]
     [RequireComponent(typeof(EnemyTargetDetector))]
     [RequireComponent(typeof(CombatController))]
+    [RequireComponent(typeof(Health))]
     public class Enemy : MonoBehaviour
     {
 
@@ -25,6 +26,7 @@ namespace ZombiesMustDie
         private EnemyStateMachine m_StateMachine;
         private EnemyTargetDetector m_TargetDetector;
         private CombatController m_Combat;
+        private Health m_Health;
 
         //GETTERS
         public EnemyAnimation Animation => m_Animation;
@@ -33,15 +35,27 @@ namespace ZombiesMustDie
         public EnemyStateMachine StateMachine => m_StateMachine;
 
         public EnemyTargetDetector TargetDetector => m_TargetDetector;
-        void Awake()
+
+        public bool IsDead => m_Health.IsDead;
+        public bool IsInteracting => m_Animation.IsInteracting;
+        private void Awake()
         {
             m_Animation = GetComponent<EnemyAnimation>();
             m_Navigation = GetComponent<EnemyNavigation>();
             m_TargetDetector = GetComponent<EnemyTargetDetector>();
             m_Combat = GetComponent<CombatController>();
+            m_Health = GetComponent<Health>();
+        }
+        private void OnEnable()
+        {
+            m_Health.Died += OnDied;
+        }
+        private void OnDisable()
+        {
+            m_Health.Died -= OnDied;
         }
 
-        void Start()
+        private void Start()
         {
             //初始化NavAgent设置
             m_Navigation.InitAgent(moveSpeed, rotationSpeed, stoppingDistance);
@@ -56,15 +70,18 @@ namespace ZombiesMustDie
             Enemy_MoveToFortress moveToFortress = new(this);
             Enemy_ChasePlayer chasePlayer = new(this);
             Enemy_Attack attack = new(this);
+            Enemy_Death death = new(this);
+
             m_StateMachine.AddState(idle);
             m_StateMachine.AddState(moveToFortress);
             m_StateMachine.AddState(chasePlayer);
             m_StateMachine.AddState(attack);
+            m_StateMachine.AddState(death);
 
             m_StateMachine.Init(idle.GetType());
         }
 
-        void Update()
+        private void Update()
         {
             m_StateMachine.LoagicUpdate();
             currentState = m_StateMachine.CurrentState.ToString();
@@ -99,6 +116,11 @@ namespace ZombiesMustDie
         {
             Debug.Log("OnAtkHit");
             m_Combat.MeleeAttack();
+        }
+
+        internal void OnDied()
+        {
+            StateMachine.ChangeState(typeof(Enemy_Death));
         }
         #endregion
     }
