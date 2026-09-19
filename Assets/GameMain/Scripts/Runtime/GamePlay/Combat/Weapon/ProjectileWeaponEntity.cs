@@ -144,6 +144,7 @@ namespace ZombiesMustDie
 
             //播放开火音效
             GameEntry.Sound.PlaySound(WeaponData.SoundId);
+            EffectSpawner.ShowMuzzleFlash(Entity, muzzle);
             return true;
         }
 

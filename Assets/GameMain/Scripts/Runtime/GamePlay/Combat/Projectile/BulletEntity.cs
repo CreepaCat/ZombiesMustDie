@@ -120,6 +120,7 @@ namespace ZombiesMustDie
                 if (target == null)
                 {
                     CachedTransform.position = hit.point;
+                    EffectSpawner.ShowBulletHit(hit.point, hit.normal);
                     HideBullet();
                     return;
                 }
@@ -144,6 +145,7 @@ namespace ZombiesMustDie
                     continue;
                 }
 
+                EffectSpawner.ShowBulletHit(hit.point, hit.normal);
                 if (remainingPenetrations <= 0)
                 {
                     CachedTransform.position = hit.point;
