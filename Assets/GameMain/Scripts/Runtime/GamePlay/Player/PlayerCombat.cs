@@ -71,7 +71,7 @@ namespace ZombiesMustDie
 
         public bool TryFire()
         {
-            Debug.Log("player try fire");
+           // Debug.Log("player try fire");
             if (!isActiveAndEnabled || !allowAttack || Time.timeScale <= 0f || combat.Owner.IsDead ||
                 lastAttemptFrame == Time.frameCount || combat.CurrentWeapon == null) return false;
             lastAttemptFrame = Time.frameCount;

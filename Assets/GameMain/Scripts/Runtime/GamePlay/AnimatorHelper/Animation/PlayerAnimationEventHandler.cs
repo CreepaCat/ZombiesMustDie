@@ -10,7 +10,7 @@ namespace ZombiesMustDie
         }
         private void ShootEvent(AnimationEvent animationEvent)
         {
-            Debug.Log("玩家射击动画事件");
+            // Debug.Log("玩家射击动画事件");
         }
     }
 }

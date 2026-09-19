@@ -149,6 +149,7 @@ namespace ZombiesMustDie
                 if (remainingPenetrations <= 0)
                 {
                     CachedTransform.position = hit.point;
+                    //todo:显示子弹命中特效，播放命中声音
                     HideBullet();
                     return;
                 }

@@ -17,10 +17,13 @@ namespace ZombiesMustDie
         private static int nextEffectId = int.MaxValue;
         private static bool subscribed;
 
+        //枪口火焰旋转调整
+        private static Vector3 MuzzleFlashRotation = new Vector3(90, 0, 0);
+
         public static bool ShowMuzzleFlash(FrameworkEntity weapon, Transform muzzle)
         {
             if (weapon == null || muzzle == null || !muzzle.IsChildOf(weapon.transform)) return false;
-            return Show(MuzzleFlashTypeId, Vector3.zero, Quaternion.identity, 0.15f, 2f,
+            return Show(MuzzleFlashTypeId, Vector3.zero, Quaternion.Euler(MuzzleFlashRotation), 0.15f, 2f,
                 new PendingAttachment(weapon, muzzle, Quaternion.Euler(90f, 0f, 0f)));
         }
 

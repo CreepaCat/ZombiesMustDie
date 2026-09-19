@@ -1,4 +1,4 @@
-#	实体表		
+#	实体表
 #	int		string
 #	Id		AssetName
 #	实体编号	策划备注	资源名称
@@ -8,8 +8,8 @@
 	20001	武器/扳手	Weapon/EngineerRifle
 	20002	武器/狙击步枪	Weapon/SniperRifle
 	20003	武器/突击步枪	Weapon/AssaultRifle
-	2101	武器/敌人武器	Weapon/EnemyRifle
+	20101	武器/敌人武器	Weapon/EnemyRifle
 	30001	玩家子弹	Bullet/PlayerBullet
 	30002	敌人子弹	Bullet/EnemyBullet
-
-
+	40001	特效/枪口火焰	Effect/effect_rifle_muzzle_1
+	40002	特效/子弹命中	Effect/effect_bullet_hit

@@ -52,7 +52,7 @@ public class InputReader : ScriptableObject, IPlayerActions
     {
         if (context.phase == InputActionPhase.Started)
         {
-            Debug.Log("玩家输入攻击");
+            //Debug.Log("玩家输入攻击");
             AttackHeld.Invoke(true);
             Attack.Invoke();
         }

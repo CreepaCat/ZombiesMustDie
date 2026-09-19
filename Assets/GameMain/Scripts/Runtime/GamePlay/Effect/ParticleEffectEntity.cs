@@ -46,6 +46,7 @@ namespace ZombiesMustDie
         {
             base.OnAttachTo(parentEntity, parentTransform, userData);
             CachedTransform.localPosition = Vector3.zero;
+            //若Attach时有需要使用prefab的本地旋转，则使用，相应的若之后position也需要则也按此处理
             CachedTransform.localRotation = effectData != null
                 ? effectData.AttachmentLocalRotation : Quaternion.identity;
             if (effectData != null && effectData.WaitForAttachment)

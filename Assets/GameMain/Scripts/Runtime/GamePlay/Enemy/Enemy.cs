@@ -122,6 +122,15 @@ namespace ZombiesMustDie
         {
             StateMachine.ChangeState(typeof(Enemy_Death));
         }
+
+        internal void ProcesseDie()
+        {
+            Navigation.StopMoving();
+            GetComponent<Collider>().enabled = false;
+            Animation.PlayDeath();
+
+            //todo:一段时间后，隐藏尸体
+        }
         #endregion
     }
 }
