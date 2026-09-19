@@ -6,17 +6,20 @@ namespace ZombiesMustDie
     public sealed class ParticleEffectEntityData : EntityData
     {
         public ParticleEffectEntityData(int entityId, int typeId, Vector3 position,
-            Quaternion rotation, bool waitForAttachment, float emissionDuration, float maxLifetime)
+            Quaternion rotation, bool waitForAttachment, Quaternion attachmentLocalRotation,
+            float emissionDuration, float maxLifetime)
             : base(entityId, typeId)
         {
             Position = position;
             Rotation = rotation;
             WaitForAttachment = waitForAttachment;
+            AttachmentLocalRotation = attachmentLocalRotation;
             EmissionDuration = Mathf.Max(0f, emissionDuration);
             MaxLifetime = Mathf.Max(0.01f, maxLifetime);
         }
 
         public bool WaitForAttachment { get; }
+        public Quaternion AttachmentLocalRotation { get; }
         public float EmissionDuration { get; }
         public float MaxLifetime { get; }
     }

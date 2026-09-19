@@ -21,7 +21,7 @@ namespace ZombiesMustDie
         {
             if (weapon == null || muzzle == null || !muzzle.IsChildOf(weapon.transform)) return false;
             return Show(MuzzleFlashTypeId, Vector3.zero, Quaternion.identity, 0.15f, 2f,
-                new PendingAttachment(weapon, muzzle));
+                new PendingAttachment(weapon, muzzle, Quaternion.Euler(90f, 0f, 0f)));
         }
 
         public static bool ShowBulletHit(Vector3 point, Vector3 normal)
@@ -55,7 +55,8 @@ namespace ZombiesMustDie
             Vector3 localPosition = groupTransform.InverseTransformPoint(worldPosition);
             Quaternion localRotation = Quaternion.Inverse(groupTransform.rotation) * worldRotation;
             var data = new ParticleEffectEntityData(id, typeId, localPosition, localRotation,
-                attachment != null, emissionDuration, maxLifetime);
+                attachment != null, attachment != null ? attachment.LocalRotation : Quaternion.identity,
+                emissionDuration, maxLifetime);
             GameEntry.Entity.ShowEntity<ParticleEffectEntity>(id,
                 AssetUtility.GetEntityAsset(row.AssetName), EffectGroupName, data);
             return true;
@@ -120,14 +121,16 @@ namespace ZombiesMustDie
 
         private sealed class PendingAttachment
         {
-            public PendingAttachment(FrameworkEntity parent, Transform muzzle)
+            public PendingAttachment(FrameworkEntity parent, Transform muzzle, Quaternion localRotation)
             {
                 Parent = parent;
                 Muzzle = muzzle;
+                LocalRotation = localRotation;
             }
 
             public FrameworkEntity Parent { get; }
             public Transform Muzzle { get; }
+            public Quaternion LocalRotation { get; }
         }
     }
 }

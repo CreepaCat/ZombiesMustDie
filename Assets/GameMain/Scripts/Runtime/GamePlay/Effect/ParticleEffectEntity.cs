@@ -46,7 +46,8 @@ namespace ZombiesMustDie
         {
             base.OnAttachTo(parentEntity, parentTransform, userData);
             CachedTransform.localPosition = Vector3.zero;
-            CachedTransform.localRotation = Quaternion.identity;
+            CachedTransform.localRotation = effectData != null
+                ? effectData.AttachmentLocalRotation : Quaternion.identity;
             if (effectData != null && effectData.WaitForAttachment)
             {
                 Play();
