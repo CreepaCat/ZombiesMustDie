@@ -1,4 +1,4 @@
-﻿using GameFramework.Procedure;
+using GameFramework.Procedure;
 using GameFramework.DataTable;
 using GameFramework.Event;
 using UnityGameFramework.Runtime;
@@ -30,6 +30,7 @@ namespace ZombiesMustDie
             GameEntry.Sound.StopAllLoadingSounds();
             GameEntry.Sound.StopAllLoadedSounds();
 
+            TowerService.ShutdownAll();
             // 隐藏所有实体
             GameEntry.Entity.HideAllLoadingEntities();
             GameEntry.Entity.HideAllLoadedEntities();

@@ -1,0 +1,6 @@
+#	防御塔表
+#	Id		Name	InitialLevelId
+#	int		string	int
+#	塔类型编号	备注	名称	初始等级编号
+	1	单体塔	机枪塔	1001
+	2	范围塔	冲击塔	2001

@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------
+//------------------------------------------------------------
 // Game Framework
 // Copyright © 2013-2021 Jiang Yin. All rights reserved.
 // Homepage: https://gameframework.cn/
@@ -33,6 +33,8 @@ namespace ZombiesMustDie
             "UIForm",
             // "UISound",
             "Weapon",
+            "Tower",
+            "TowerLevel",
         };
 
         private Dictionary<string, bool> m_LoadedFlag = new Dictionary<string, bool>();

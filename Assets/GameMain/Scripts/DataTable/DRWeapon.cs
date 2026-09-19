@@ -38,6 +38,7 @@ namespace ZombiesMustDie
         public float SpreadAngle { get; private set; }
 
         public int PenetrationCount { get; private set; }
+        public float AreaRadius { get; private set; }
 
         public override bool ParseDataRow(string dataRowString, object userData)
         {
@@ -61,6 +62,8 @@ namespace ZombiesMustDie
             MagazineSize = int.Parse(columnStrings[index++]);
             SpreadAngle = float.Parse(columnStrings[index++]);
             PenetrationCount = int.Parse(columnStrings[index++]);
+            AreaRadius = index < columnStrings.Length && !string.IsNullOrEmpty(columnStrings[index])
+                ? float.Parse(columnStrings[index], System.Globalization.CultureInfo.InvariantCulture) : 0f;
 
             GeneratePropertyArray();
             return true;
@@ -83,6 +86,7 @@ namespace ZombiesMustDie
                     MagazineSize = binaryReader.Read7BitEncodedInt32();
                     SpreadAngle = binaryReader.ReadSingle();
                     PenetrationCount = binaryReader.Read7BitEncodedInt32();
+                    AreaRadius = memoryStream.Position < memoryStream.Length ? binaryReader.ReadSingle() : 0f;
                 }
             }
 

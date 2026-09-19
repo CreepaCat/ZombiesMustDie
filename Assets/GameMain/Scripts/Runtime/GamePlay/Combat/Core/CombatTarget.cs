@@ -12,6 +12,16 @@ namespace ZombiesMustDie
         [SerializeField] private CombatFaction faction = CombatFaction.Neutral;
 
         private Health health;
+        [SerializeField] private bool isTargetable = true;
+        [SerializeField] private bool invulnerable;
+        public bool IsTargetable => isTargetable;
+        public bool Invulnerable => invulnerable;
+        public void Configure(CombatFaction value, bool targetable, bool immune)
+        {
+            faction = value;
+            isTargetable = targetable;
+            invulnerable = immune;
+        }
 
         public CombatFaction Faction => faction;
         public bool IsDead => Health.IsDead;
@@ -35,7 +45,7 @@ namespace ZombiesMustDie
 
         public DamageResult TakeDamage(in DamageInfo damageInfo)
         {
-            return Health.TakeDamage(damageInfo.Amount);
+            return invulnerable ? DamageResult.Failed(IsDead) : Health.TakeDamage(damageInfo.Amount);
         }
     }
 }

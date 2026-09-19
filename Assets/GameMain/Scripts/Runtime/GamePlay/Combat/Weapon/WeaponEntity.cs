@@ -16,6 +16,14 @@ namespace ZombiesMustDie
         private bool isReloading;
         private float reloadFinishTime;
         private Transform poolParent;
+        private bool unlimitedAmmo;
+        /// <summary>无限弹药，并继承升级前的冷却截止时间。</summary>
+        public void ConfigureTowerWeapon(float cooldownDeadline)
+        {
+            unlimitedAmmo = true;
+            isReloading = false;
+            nextAttackTime = Mathf.Max(Time.time, cooldownDeadline);
+        }
 
         public int WeaponId => weaponData != null ? weaponData.Id : 0;
         public DRWeapon WeaponData => weaponData;
@@ -25,8 +33,8 @@ namespace ZombiesMustDie
         public int CurrentMagazineAmmo { get { UpdateReload(); return currentMagazineAmmo; } }
         public bool IsReloading { get { UpdateReload(); return isReloading; } }
         public bool IsReady => Available && weaponData != null && owner != null &&
-            owner.isActiveAndEnabled && !owner.Owner.IsDead /*&& !IsReloading &&
-            (weaponData.MagazineSize <= 0 || CurrentMagazineAmmo > 0) && CooldownRemaining <= 0f*/;
+            owner.isActiveAndEnabled && !owner.Owner.IsDead && !IsReloading &&
+            (unlimitedAmmo || weaponData.MagazineSize <= 0 || CurrentMagazineAmmo > 0) && CooldownRemaining <= 0f;
 
         protected override void OnInit(object userData)
         {
@@ -40,6 +48,7 @@ namespace ZombiesMustDie
 
             weaponData = null;
             owner = null;
+            unlimitedAmmo = false;
             nextAttackTime = Time.time;
 
             WeaponEntityData entityData = userData as WeaponEntityData;
@@ -96,6 +105,7 @@ namespace ZombiesMustDie
             currentMagazineAmmo = 0;
             isReloading = false;
             reloadFinishTime = 0f;
+            unlimitedAmmo = false;
 
             // Also restore manually parented weapons owned by non-Entity players.
             CachedTransform.SetParent(poolParent, false);
@@ -139,11 +149,10 @@ namespace ZombiesMustDie
         {
             if (Time.timeScale <= 0f || !IsReady || !OnAttack(in request))
             {
-                Debug.Log("武器没准备好");
                 return false;
             }
 
-            if (weaponData.MagazineSize > 0)
+            if (!unlimitedAmmo && weaponData.MagazineSize > 0)
             {
                 currentMagazineAmmo--;
             }
@@ -154,7 +163,7 @@ namespace ZombiesMustDie
         /// <summary>备用弹药不限量；卸下或回收时取消换弹。</summary>
         public bool TryReload(float duration)
         {
-            if (!Available || weaponData == null || owner == null || !owner.isActiveAndEnabled ||
+            if (unlimitedAmmo || !Available || weaponData == null || owner == null || !owner.isActiveAndEnabled ||
                 owner.Owner.IsDead || IsReloading || weaponData.MagazineSize <= 0 ||
                 CurrentMagazineAmmo >= weaponData.MagazineSize || float.IsNaN(duration) ||
                 float.IsInfinity(duration) || Time.timeScale <= 0f)
