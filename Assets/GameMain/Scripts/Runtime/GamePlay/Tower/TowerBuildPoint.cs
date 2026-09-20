@@ -1,15 +1,27 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace ZombiesMustDie
 {
     public enum TowerOperationState { Empty, Building, Working, Upgrading }
 
     [DisallowMultipleComponent]
-    public sealed class TowerBuildPoint : MonoBehaviour
+    public sealed class TowerBuildPoint : Interactable
     {
         [SerializeField] private Transform spawnPoint;
         [SerializeField] private int[] allowedTowerIds = { 1, 2 };
+
+        [SerializeField] private UnityEvent<TowerBuildPoint> onBuildSelectionRequested = new UnityEvent<TowerBuildPoint>();
+
+        public UnityEvent<TowerBuildPoint> OnBuildSelectionRequested => onBuildSelectionRequested;
+        public override bool CanInteract => isActiveAndEnabled && State == TowerOperationState.Empty && Service == null;
+        public override string Prompt => "建造";
+
+        public override void Interact()
+        {
+            if (CanInteract) onBuildSelectionRequested.Invoke(this);
+        }
 
         private ParticleSystem[] particles; //建造点粒子特效
         private bool playing = false;
@@ -23,14 +35,16 @@ namespace ZombiesMustDie
         public bool IsBusy => State != TowerOperationState.Empty && State != TowerOperationState.Working;
         public bool Allows(int towerId) => allowedTowerIds != null && Array.IndexOf(allowedTowerIds, towerId) >= 0;
 
-        void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             particles = GetComponentsInChildren<ParticleSystem>(true);
             PlayVfx();
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             if (Service != null) Service.ReleasePoint(this);
 
             StopParticles(ParticleSystemStopBehavior.StopEmittingAndClear);

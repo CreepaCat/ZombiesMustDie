@@ -19,6 +19,7 @@ public class InputReader : ScriptableObject, IPlayerActions
 
 
     PlayerInputActions inputActions;
+    public bool PlayerControlEnabled => inputActions != null && inputActions.Player.enabled;
     public Vector2 Direction => inputActions.Player.Move.ReadValue<Vector2>();
     bool IsDeviceMouse(InputAction.CallbackContext context) => context.control.device.name == "Mouse";
 
