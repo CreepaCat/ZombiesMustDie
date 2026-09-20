@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3000442003940416605}
   - component: {fileID: 7337878745666607144}
   - component: {fileID: 7073925468196007515}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: TowerBuildPoint
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
@@ -113,7 +113,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1
+  m_Radius: 1.6
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7073925468196007515
 MonoBehaviour:
@@ -127,8 +127,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 223d2a650b7ea6142b50aa805fcfe912, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.TowerBuildPoint
+  highlightLayer:
+    serializedVersion: 0
+    m_Bits: 2
   spawnPoint: {fileID: 2365708025063852241}
   allowedTowerIds: 0100000002000000i
+  onBuildSelectionRequested:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: TestBuildTower, Assembly-CSharp
+        m_MethodName: Build
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &5577435832922146757
 PrefabInstance:
   m_ObjectHideFlags: 0

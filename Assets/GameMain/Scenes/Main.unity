@@ -15888,7 +15888,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc490fc36c0b9049a93d78b5a97502a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestBuildTower
-  buildPoint: {fileID: 4399147736426973748}
   towerService: {fileID: 1842750642}
   towerId: 1
 --- !u!114 &293486409
@@ -15903,7 +15902,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc490fc36c0b9049a93d78b5a97502a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestBuildTower
-  buildPoint: {fileID: 516757545}
   towerService: {fileID: 1842750642}
   towerId: 2
 --- !u!1001 &294144251
@@ -25770,6 +25768,42 @@ PrefabInstance:
     - target: {fileID: 5824229490151022765, guid: 14cca8823f2eb3c4aa2cc755590f440b, type: 3}
       propertyPath: m_Name
       value: TowerBuildPoint (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7073925468196007515, guid: 14cca8823f2eb3c4aa2cc755590f440b, type: 3}
+      propertyPath: highlightLayer.m_Bits
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7073925468196007515, guid: 14cca8823f2eb3c4aa2cc755590f440b, type: 3}
+      propertyPath: onBuildSelectionRequested.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7073925468196007515, guid: 14cca8823f2eb3c4aa2cc755590f440b, type: 3}
+      propertyPath: onBuildSelectionRequested.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7073925468196007515, guid: 14cca8823f2eb3c4aa2cc755590f440b, type: 3}
+      propertyPath: onBuildSelectionRequested.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 293486409}
+    - target: {fileID: 7073925468196007515, guid: 14cca8823f2eb3c4aa2cc755590f440b, type: 3}
+      propertyPath: onBuildSelectionRequested.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7073925468196007515, guid: 14cca8823f2eb3c4aa2cc755590f440b, type: 3}
+      propertyPath: onBuildSelectionRequested.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Build
+      objectReference: {fileID: 0}
+    - target: {fileID: 7073925468196007515, guid: 14cca8823f2eb3c4aa2cc755590f440b, type: 3}
+      propertyPath: onBuildSelectionRequested.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: TestBuildTower, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7073925468196007515, guid: 14cca8823f2eb3c4aa2cc755590f440b, type: 3}
+      propertyPath: onBuildSelectionRequested.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 516757545}
+    - target: {fileID: 7073925468196007515, guid: 14cca8823f2eb3c4aa2cc755590f440b, type: 3}
+      propertyPath: onBuildSelectionRequested.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: ZombiesMustDie.TowerBuildPoint, Assembly-CSharp
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -101561,9 +101595,29 @@ PrefabInstance:
       propertyPath: m_Name
       value: TowerBuildPoint
       objectReference: {fileID: 0}
-    - target: {fileID: 7337878745666607144, guid: 14cca8823f2eb3c4aa2cc755590f440b, type: 3}
-      propertyPath: m_Radius
-      value: 1.6
+    - target: {fileID: 5824229490151022765, guid: 14cca8823f2eb3c4aa2cc755590f440b, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7073925468196007515, guid: 14cca8823f2eb3c4aa2cc755590f440b, type: 3}
+      propertyPath: onBuildSelectionRequested.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7073925468196007515, guid: 14cca8823f2eb3c4aa2cc755590f440b, type: 3}
+      propertyPath: onBuildSelectionRequested.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 293486408}
+    - target: {fileID: 7073925468196007515, guid: 14cca8823f2eb3c4aa2cc755590f440b, type: 3}
+      propertyPath: onBuildSelectionRequested.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Build
+      objectReference: {fileID: 0}
+    - target: {fileID: 7073925468196007515, guid: 14cca8823f2eb3c4aa2cc755590f440b, type: 3}
+      propertyPath: onBuildSelectionRequested.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 4399147736426973748}
+    - target: {fileID: 7073925468196007515, guid: 14cca8823f2eb3c4aa2cc755590f440b, type: 3}
+      propertyPath: onBuildSelectionRequested.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: ZombiesMustDie.TowerBuildPoint, Assembly-CSharp
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -101897,29 +101951,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6648587236194828450, guid: 9e60c90cb76ce694b8c7d0704dbf3294, type: 3}
-      propertyPath: m_SlopeLimit
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 6648587236194828450, guid: 9e60c90cb76ce694b8c7d0704dbf3294, type: 3}
-      propertyPath: m_StepOffset
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 7690565378759937667, guid: 9e60c90cb76ce694b8c7d0704dbf3294, type: 3}
       propertyPath: m_Name
       value: Core
-      objectReference: {fileID: 0}
-    - target: {fileID: 8035873085066376827, guid: 9e60c90cb76ce694b8c7d0704dbf3294, type: 3}
-      propertyPath: bulletHitLayer.m_Bits
-      value: 257
-      objectReference: {fileID: 0}
-    - target: {fileID: 8395066062435620678, guid: 9e60c90cb76ce694b8c7d0704dbf3294, type: 3}
-      propertyPath: moveInputChangeSpeed
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 8395066062435620678, guid: 9e60c90cb76ce694b8c7d0704dbf3294, type: 3}
-      propertyPath: rootMotionMoveMultiplier
-      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

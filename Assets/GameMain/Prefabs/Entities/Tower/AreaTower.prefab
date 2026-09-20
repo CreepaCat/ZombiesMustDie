@@ -106,7 +106,6 @@ GameObject:
   - component: {fileID: 3875997241199945272}
   - component: {fileID: 3428395302371425976}
   - component: {fileID: 1489904003047631687}
-  - component: {fileID: 889353733763080974}
   m_Layer: 0
   m_Name: AreaTower
   m_TagString: Untagged
@@ -128,6 +127,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5517078340716207088}
+  - {fileID: 5637182742612551345}
+  - {fileID: 4305070730134089391}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &2828095768551750652
@@ -211,8 +212,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87cbf30e807086348a8fe3fe8a869886, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.TowerCombat
-  turret: {fileID: 838482065015277145}
-  sightOrigin: {fileID: 0}
+  turret: {fileID: 5637182742612551345}
+  sightOrigin: {fileID: 4305070730134089391}
   aimTolerance: 5
   obstructionLayers:
     serializedVersion: 2
@@ -233,18 +234,37 @@ MonoBehaviour:
   enemyLayers:
     serializedVersion: 2
     m_Bits: 256
---- !u!114 &889353733763080974
-MonoBehaviour:
+--- !u!1 &3457504724811376903
+GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2508789497748400460}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf98443d5f0c23d409dd4ba1f6cf8cf1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.TowerEntity
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5637182742612551345}
+  m_Layer: 0
+  m_Name: Turrent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5637182742612551345
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3457504724811376903}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 536665664326379135}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4130868492875170684
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,12 +289,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4130868492875170684}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.85, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 838482065015277145}
+  m_Father: {fileID: 536665664326379135}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7226464051475635823
 GameObject:
@@ -306,8 +326,7 @@ Transform:
   m_LocalPosition: {x: 0.0020184517, y: 0.9993656, z: -0.0063591003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 4305070730134089391}
+  m_Children: []
   m_Father: {fileID: 5517078340716207088}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5427412920221303528

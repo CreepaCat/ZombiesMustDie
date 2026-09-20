@@ -70,6 +70,7 @@ GameObject:
   - component: {fileID: 3179748497006689978}
   - component: {fileID: 5029656458763798}
   - component: {fileID: 8035873085066376827}
+  - component: {fileID: 1755740751219576849}
   m_Layer: 7
   m_Name: PlayerAmature
   m_TagString: Player
@@ -113,8 +114,8 @@ CharacterController:
   serializedVersion: 3
   m_Height: 2.6
   m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_SlopeLimit: 30
+  m_StepOffset: 0.1
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1.4, z: 0}
@@ -191,7 +192,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.PlayerLocomotion
   rootMotionMoveMultiplier: 1.5
   backwardMoveSpeed: 3
-  moveInputChangeSpeed: 6
+  moveInputChangeSpeed: 8
   groundStickSpeed: 10
   cameraRoot: {fileID: 7510293825731254347}
 --- !u!114 &6682699295859183569
@@ -321,6 +322,22 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 257
   triggerInteraction: 2
+--- !u!114 &1755740751219576849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1687364748778691635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba991ab996a59f044b3d1ab6324aa5b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.PlayerInteraction
+  interactionRadius: 3
+  interactionMask:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!1 &2907479834492189687
 GameObject:
   m_ObjectHideFlags: 0

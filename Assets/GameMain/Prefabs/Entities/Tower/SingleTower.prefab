@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5996532617139324706}
   - component: {fileID: 8285985159935611603}
-  - component: {fileID: 892400282523164330}
   - component: {fileID: 1795656555811882995}
   - component: {fileID: 3797637356621223484}
   - component: {fileID: 6350518349429423458}
@@ -61,18 +60,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &892400282523164330
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2153819942854471416}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf98443d5f0c23d409dd4ba1f6cf8cf1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.TowerEntity
 --- !u!114 &1795656555811882995
 MonoBehaviour:
   m_ObjectHideFlags: 0
