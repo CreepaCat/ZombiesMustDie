@@ -22,7 +22,6 @@ namespace ZombiesMustDie
         private readonly Dictionary<int, Pending> loads = new Dictionary<int, Pending>();
         private bool subscribed;
         private bool closing;
-        private bool executing;
         private float nextHealthCheck;
         public string LastError { get; private set; }
         public event Action Changed;
@@ -79,7 +78,6 @@ namespace ZombiesMustDie
         /// <summary>建造和升级共用的加载入口；资源就绪后立即启用防御塔，不设置建造时长。</summary>
         private void RequestTowerLoad(Slot slot, int towerId, DRTowerLevel level, DRWeapon weapon)
         {
-            executing = true;
             var operation = Guid.NewGuid();
             slot.Point.OperationId = operation;
             slot.Point.State = slot.Tower == null ? TowerOperationState.Building : TowerOperationState.Upgrading;
@@ -90,29 +88,19 @@ namespace ZombiesMustDie
                 Deadline = Time.realtimeSinceStartup + Mathf.Max(1f, loadTimeout),
                 CooldownDeadline = Time.time + ((slot.Tower?.Combat.CurrentWeapon as WeaponEntity)?.CooldownRemaining ?? 0f)
             };
+            // 点位状态和待加载记录负责防止重复提交，不使用服务级执行锁。
             slot.Pending = pending;
-            bool requested = false;
-            try
-            {
-                if (slot.Tower != null) slot.Tower.SetWorking(false);
-                Subscribe();
-                loads.Add(pending.Data.Id, pending);
-                DREntity entity = GameEntry.DataTable.GetDataTable<DREntity>().GetDataRow(level.EntityId);
-                GameEntry.Entity.ShowEntity<TowerEntity>(pending.Data.Id,
-                    AssetUtility.GetEntityAsset(entity.AssetName), towerGroup, pending.Data);
-                requested = true;
-                LastError = null;
-            }
-            finally
-            {
-                // 同步加载异常也要释放操作锁，异步失败由事件处理。
-                executing = false;
-                if (!requested) Rollback(pending, "塔实体加载请求失败。");
-            }
+            if (slot.Tower != null) slot.Tower.SetWorking(false);
+            Subscribe();
+            loads.Add(pending.Data.Id, pending);
+            DREntity entity = GameEntry.DataTable.GetDataTable<DREntity>().GetDataRow(level.EntityId);
+            LastError = null;
+            GameEntry.Entity.ShowEntity<TowerEntity>(pending.Data.Id,
+                AssetUtility.GetEntityAsset(entity.AssetName), towerGroup, pending.Data);
             Notify();
         }
 
-        private bool Ready(TowerBuildPoint point) => !closing && !executing && isActiveAndEnabled &&
+        private bool Ready(TowerBuildPoint point) => !closing && isActiveAndEnabled &&
             point != null && point.isActiveAndEnabled && GameEntry.Entity != null &&
             GameEntry.Event != null && GameEntry.DataTable != null;
 
@@ -150,45 +138,57 @@ namespace ZombiesMustDie
             bool towerResult = e.Entity.Id == p.Data.Id;
             if (!ReferenceEquals(e.UserData, towerResult ? (object)p.Data : p.WeaponData)) return;
             if (!Current(p)) { Rollback(p, "建造操作已取消。"); return; }
-            executing = true;
-            bool completed = false;
-            try
+
+            if (towerResult)
             {
-                if (towerResult)
-                {
-                    loads.Remove(p.Data.Id);
-                    p.Tower = e.Entity.Logic as TowerEntity;
-                    if (p.Tower == null || p.Tower.Data != p.Data) return;
-                    p.WeaponId = NewEntityId();
-                    // 未提交前不装备，避免影响旧塔或提前攻击。
-                    p.WeaponData = p.Config.AreaRadius > 0f
-                        ? new WeaponEntityData(p.WeaponId, p.Config.EntityId, p.Config.Id, null, p.Config)
-                        : new ProjectileWeaponEntityData(p.WeaponId, p.Config.EntityId, p.Config.Id, null,
-                            muzzlePath, bulletGroup, Mathf.Max(5f, p.Data.Level.Range / p.Config.BulletSpeed + 1f), weaponConfig: p.Config);
-                    loads.Add(p.WeaponId, p);
-                    var config = GameEntry.DataTable.GetDataTable<DREntity>()?.GetDataRow(p.Config.EntityId);
-                    if (config == null || string.IsNullOrEmpty(config.AssetName)) return;
-                    GameEntry.Entity.ShowEntity(p.WeaponId, p.Config.AreaRadius > 0f ? typeof(AreaWeaponEntity) : typeof(ProjectileWeaponEntity),
-                        AssetUtility.GetEntityAsset(config.AssetName), weaponGroup, p.WeaponData);
-                }
-                else
-                {
-                    var weapon = e.Entity.Logic as WeaponEntity;
-                    if (weapon == null || weapon.WeaponData != p.Config || p.Tower == null || !p.Tower.Available) return;
-                    GameEntry.Entity.AttachEntity(e.Entity, p.Tower.Entity, p.Tower.TowerCombat.WeaponMount);
-                    e.Entity.transform.localPosition = Vector3.zero;
-                    e.Entity.transform.localRotation = Quaternion.identity;
-                    weapon.ConfigureTowerWeapon(p.CooldownDeadline);
-                    if (!p.Tower.Combat.EquipWeapon(weapon)) return;
-                    Commit(p);
-                }
-                completed = true;
+                RequestWeaponLoad(p, e.Entity);
+                return;
             }
-            finally
+
+            var weapon = e.Entity.Logic as WeaponEntity;
+            if (weapon == null || weapon.WeaponData != p.Config || p.Tower == null || !p.Tower.Available)
             {
-                executing = false;
-                if (!completed) Rollback(p, "塔或武器初始化失败。");
+                Rollback(p, "武器初始化失败。");
+                return;
             }
+            GameEntry.Entity.AttachEntity(e.Entity, p.Tower.Entity, p.Tower.TowerCombat.WeaponMount);
+            e.Entity.transform.localPosition = Vector3.zero;
+            e.Entity.transform.localRotation = Quaternion.identity;
+            weapon.ConfigureTowerWeapon(p.CooldownDeadline);
+            if (!p.Tower.Combat.EquipWeapon(weapon))
+            {
+                Rollback(p, "装备武器失败。");
+                return;
+            }
+            Commit(p);
+        }
+
+        private void RequestWeaponLoad(Pending p, UnityGameFramework.Runtime.Entity entity)
+        {
+            p.Tower = entity.Logic as TowerEntity;
+            if (p.Tower == null || p.Tower.Data != p.Data)
+            {
+                Rollback(p, "塔实体初始化失败。");
+                return;
+            }
+            var config = GameEntry.DataTable.GetDataTable<DREntity>()?.GetDataRow(p.Config.EntityId);
+            if (config == null || string.IsNullOrEmpty(config.AssetName) ||
+                GameEntry.Entity.GetEntityGroup(weaponGroup) == null)
+            {
+                Rollback(p, "武器实体配置或实体组无效。");
+                return;
+            }
+
+            loads.Remove(p.Data.Id);
+            p.WeaponId = NewEntityId();
+            // 未提交前不装备，避免影响旧塔或提前攻击。
+            p.WeaponData = p.Config.AreaRadius > 0f
+                ? new WeaponEntityData(p.WeaponId, p.Config.EntityId, p.Config.Id, null, p.Config)
+                : new ProjectileWeaponEntityData(p.WeaponId, p.Config.EntityId, p.Config.Id, null,
+                    muzzlePath, bulletGroup, Mathf.Max(5f, p.Data.Level.Range / p.Config.BulletSpeed + 1f), weaponConfig: p.Config);
+            loads.Add(p.WeaponId, p);
+            GameEntry.Entity.ShowEntity(p.WeaponId, p.Config.AreaRadius > 0f ? typeof(AreaWeaponEntity) : typeof(ProjectileWeaponEntity),
+                AssetUtility.GetEntityAsset(config.AssetName), weaponGroup, p.WeaponData);
         }
 
         private bool Current(Pending p) => !closing && p.Slot.Point != null && p.Slot.Point.isActiveAndEnabled &&
