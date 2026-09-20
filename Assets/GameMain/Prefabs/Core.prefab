@@ -63,8 +63,8 @@ GameObject:
   - component: {fileID: 243572157195687048}
   - component: {fileID: 8341177056197257432}
   - component: {fileID: 6398866726242949460}
-  - component: {fileID: 6682699295859183569}
   - component: {fileID: 8395066062435620678}
+  - component: {fileID: 6682699295859183569}
   - component: {fileID: 1778841113900466533}
   - component: {fileID: 1190202079380673128}
   - component: {fileID: 3179748497006689978}
@@ -177,19 +177,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a9172b05f486004f9646effb3a617ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.PlayerAnimationEventHandler
---- !u!114 &6682699295859183569
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1687364748778691635}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59d3c9fadf3ba4b46825c60b151bdabd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Health
-  maxHealth: 100
 --- !u!114 &8395066062435620678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,6 +194,19 @@ MonoBehaviour:
   moveInputChangeSpeed: 6
   groundStickSpeed: 10
   cameraRoot: {fileID: 7510293825731254347}
+--- !u!114 &6682699295859183569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1687364748778691635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59d3c9fadf3ba4b46825c60b151bdabd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Health
+  maxHealth: 100
 --- !u!114 &1778841113900466533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,6 +220,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CombatTarget
   faction: 1
+  isTargetable: 1
+  invulnerable: 0
 --- !u!114 &1190202079380673128
 MonoBehaviour:
   m_ObjectHideFlags: 0

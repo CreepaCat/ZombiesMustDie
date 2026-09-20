@@ -37,15 +37,20 @@ public class InputReader : ScriptableObject, IPlayerActions
     {
         inputActions.Enable();
         Debug.Log("玩家输入已启用");
+        EnablePlayerControl();
     }
 
     public void EnablePlayerControl()
     {
         inputActions.Player.Enable();
+        //锁定鼠标
+        LockCursor(true);
     }
     public void DisablePlayerAction()
     {
         inputActions.Player.Disable();
+        //显示鼠标
+        LockCursor(false);
     }
 
     public void OnAttack(InputAction.CallbackContext context)
@@ -109,6 +114,13 @@ public class InputReader : ScriptableObject, IPlayerActions
                 Sprint.Invoke(false);
                 break;
         }
+    }
+
+    private void LockCursor(bool doLock)
+    {
+
+        Cursor.lockState = doLock ? CursorLockMode.Locked : CursorLockMode.None;
+        Cursor.visible = doLock ? false : true;
     }
 
 }
