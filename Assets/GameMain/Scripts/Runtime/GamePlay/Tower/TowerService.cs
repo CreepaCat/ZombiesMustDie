@@ -59,6 +59,7 @@ namespace ZombiesMustDie
             var slot = new Slot { Point = point };
             slots.Add(point, slot);
             point.Service = this;
+            point.StopParticles(ParticleSystemStopBehavior.StopEmitting);
             RequestTowerLoad(slot, towerId, level, weapon);
             return true;
         }
