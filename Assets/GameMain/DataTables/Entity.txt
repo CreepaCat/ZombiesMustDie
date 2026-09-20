@@ -9,12 +9,13 @@
 	20002	武器/狙击步枪	Weapon/SniperRifle
 	20003	武器/突击步枪	Weapon/AssaultRifle
 	20101	武器/敌人武器	Weapon/EnemyRifle
+	20301	防御塔机枪	Weapon/TowerGun
+	20401	防御塔范围武器	Weapon/TowerArea
 	30001	玩家子弹	Bullet/PlayerBullet
 	30002	敌人子弹	Bullet/EnemyBullet
 	40001	特效/枪口火焰	Effect/effect_rifle_muzzle_1
 	40002	特效/子弹命中	Effect/effect_bullet_hit
-
+	40401	特效/范围防御塔攻击	Effect/effect_tower_area_attack
+	40402	特效/范围防御塔攻击命中	Effect/effect_tower_area_hit
 	50001	单体防御塔	Tower/SingleTower
 	50002	范围防御塔	Tower/AreaTower
-	20301	防御塔机枪	Weapon/TowerGun
-	20401	防御塔范围武器	Weapon/TowerArea

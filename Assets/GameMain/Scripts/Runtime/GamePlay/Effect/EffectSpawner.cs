@@ -12,6 +12,8 @@ namespace ZombiesMustDie
     {
         private const int MuzzleFlashTypeId = 40001;
         private const int BulletHitTypeId = 40002;
+        private const int AreaTowerAttackTypeId = 40401;
+        private const int AreaTowerHitTypeId = 40402;
         private const string EffectGroupName = "Effect";
         private static readonly Dictionary<int, PendingAttachment> Pending = new Dictionary<int, PendingAttachment>();
         private static int nextEffectId = int.MaxValue;
@@ -19,6 +21,20 @@ namespace ZombiesMustDie
 
         //枪口火焰旋转调整
         private static Vector3 MuzzleFlashRotation = new Vector3(90, 0, 0);
+
+        public static bool ShowAreaTowerAttack(FrameworkEntity weapon, Transform muzzle)
+        {
+            if (weapon == null || muzzle == null) return false;
+            return Show(AreaTowerAttackTypeId, Vector3.zero, Quaternion.identity, 0.15f, 2f,
+                new PendingAttachment(weapon, muzzle, Quaternion.Euler(0f, 0f, 0f)));
+        }
+
+        public static bool ShowAreaTowerHit(Vector3 point, Vector3 normal)
+        {
+            Quaternion rotation = normal.sqrMagnitude > 0.000001f
+                ? Quaternion.LookRotation(normal) : Quaternion.identity;
+            return Show(AreaTowerHitTypeId, point, rotation, 0.25f, 3f, null);
+        }
 
         public static bool ShowMuzzleFlash(FrameworkEntity weapon, Transform muzzle)
         {

@@ -12,13 +12,23 @@ namespace ZombiesMustDie
         {
             if (!request.HasAimPoint || WeaponData.AreaRadius <= 0f) return false;
             damaged.Clear();
+            //todo：播放音效 和 特效
+            //播放开火音效
+            GameEntry.Sound.PlaySound(WeaponData.SoundId);
+            //播放攻击特效
+            EffectSpawner.ShowAreaTowerAttack(Entity, transform.Find("Muzzle"));
             foreach (Collider hit in Physics.OverlapSphere(request.AimPoint, WeaponData.AreaRadius,
                 ~0, QueryTriggerInteraction.Collide))
             {
                 CombatTarget target = hit.GetComponentInParent<CombatTarget>();
                 if (target == null || !target.isActiveAndEnabled || target.IsDead ||
                     target.Faction != CombatFaction.Enemy || !damaged.Add(target)) continue;
-                DealDamage(target, hit.ClosestPoint(request.AimPoint), target.transform.position - request.AimPoint);
+                //todo：对每个攻击到的对象，播放命中音效和特效
+                Vector3 hitPoint = hit.ClosestPoint(request.AimPoint);
+                Vector3 hitDirection = target.transform.position - request.AimPoint;
+                DealDamage(target, hitPoint, hitDirection);
+
+                EffectSpawner.ShowAreaTowerHit(hitPoint, hitDirection.normalized);
             }
             return true;
         }

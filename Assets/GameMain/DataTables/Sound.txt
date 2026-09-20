@@ -6,3 +6,4 @@
 	10000	bullet_hit_body	子弹命中肉体	0	FALSE	1	0	100
 	10001	bullet_hit_rock	子弹命中石头	0	FALSE	1	0	100
 	20003	rifle_shoot	自动步枪开火	0	FALSE	1	0	100
+	40001	tower_area_attack	范围防御塔攻击	0	FALSE	1	0	100
