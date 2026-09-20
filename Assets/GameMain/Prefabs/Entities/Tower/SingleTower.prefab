@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.CombatTarget
   faction: 1
-  isTargetable: 1
+  isTargetable: 0
   invulnerable: 1
 --- !u!114 &6350518349429423458
 MonoBehaviour:

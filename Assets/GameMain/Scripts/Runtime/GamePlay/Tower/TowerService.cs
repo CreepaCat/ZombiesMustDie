@@ -83,7 +83,8 @@ namespace ZombiesMustDie
             slot.Point.State = slot.Tower == null ? TowerOperationState.Building : TowerOperationState.Upgrading;
             var pending = new Pending
             {
-                Slot = slot, Config = weapon,
+                Slot = slot,
+                Config = weapon,
                 Data = new TowerEntityData(NewEntityId(), towerId, level, slot.Point, this, operation),
                 Deadline = Time.realtimeSinceStartup + Mathf.Max(1f, loadTimeout),
                 CooldownDeadline = Time.time + ((slot.Tower?.Combat.CurrentWeapon as WeaponEntity)?.CooldownRemaining ?? 0f)
@@ -151,7 +152,7 @@ namespace ZombiesMustDie
                 Rollback(p, "武器初始化失败。");
                 return;
             }
-            GameEntry.Entity.AttachEntity(e.Entity, p.Tower.Entity, p.Tower.TowerCombat.WeaponMount);
+            GameEntry.Entity.AttachEntity(e.Entity, p.Tower.Entity, p.Tower.Combat.WeaponSocket);
             e.Entity.transform.localPosition = Vector3.zero;
             e.Entity.transform.localRotation = Quaternion.identity;
             weapon.ConfigureTowerWeapon(p.CooldownDeadline);

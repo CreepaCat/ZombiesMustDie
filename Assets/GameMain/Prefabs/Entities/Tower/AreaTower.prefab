@@ -178,7 +178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.CombatTarget
   faction: 1
-  isTargetable: 1
+  isTargetable: 0
   invulnerable: 1
 --- !u!114 &3875997241199945272
 MonoBehaviour:
@@ -211,8 +211,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87cbf30e807086348a8fe3fe8a869886, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.TowerCombat
-  turret: {fileID: 4305070730134089391}
-  sightOrigin: {fileID: 4305070730134089391}
+  turret: {fileID: 838482065015277145}
+  sightOrigin: {fileID: 0}
   aimTolerance: 5
   obstructionLayers:
     serializedVersion: 2

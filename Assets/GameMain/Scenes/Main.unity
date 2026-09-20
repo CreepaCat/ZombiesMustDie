@@ -15944,6 +15944,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TestBuildTower
   buildPoint: {fileID: 4399147736426973748}
   towerService: {fileID: 1842750642}
+  towerId: 1
 --- !u!1001 &294144251
 PrefabInstance:
   m_ObjectHideFlags: 0
