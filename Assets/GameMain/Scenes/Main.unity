@@ -86196,7 +86196,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1842750644}
-  - component: {fileID: 1842750643}
   - component: {fileID: 1842750642}
   m_Layer: 0
   m_Name: LevelManager
@@ -86217,25 +86216,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fcaf7c0c8925c64bab201c008adaad5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.TowerService
-  wallet: {fileID: 0}
   towerGroup: Tower
   weaponGroup: Weapon
   bulletGroup: Bullet
   muzzlePath: Muzzle
   loadTimeout: 20
---- !u!114 &1842750643
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1842750641}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe0e27468de06014ab5ae0d369c67857, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.PlayerWallet
-  initialCoins: 500
 --- !u!4 &1842750644
 Transform:
   m_ObjectHideFlags: 0

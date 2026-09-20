@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ZombiesMustDie
 {
-    public enum TowerOperationState { Empty, Building, Working, Upgrading, Demolishing }
+    public enum TowerOperationState { Empty, Building, Working, Upgrading }
 
     [DisallowMultipleComponent]
     public sealed class TowerBuildPoint : MonoBehaviour
@@ -17,16 +17,6 @@ namespace ZombiesMustDie
         public Guid OperationId { get; internal set; }
         public bool IsBusy => State != TowerOperationState.Empty && State != TowerOperationState.Working;
         public bool Allows(int towerId) => allowedTowerIds != null && Array.IndexOf(allowedTowerIds, towerId) >= 0;
-
-        public int? OpenManageForm(TowerService service)
-        {
-            if (!isActiveAndEnabled || service == null || !service.isActiveAndEnabled ||
-                (Service != null && Service != service) || GameEntry.UI == null) return null;
-            var data = new TowerManageFormData(service, this);
-            var existing = GameEntry.UI.GetUIForm(UIFormId.TowerManageForm) as TowerManageForm;
-            if (existing != null) { existing.Bind(data); return existing.UIForm.SerialId; }
-            return GameEntry.UI.OpenUIForm(UIFormId.TowerManageForm, data);
-        }
 
         private void OnDisable()
         {

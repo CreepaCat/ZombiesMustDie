@@ -1,8 +1,8 @@
 #	防御塔等级表
-#	Id		Level	EntityId	WeaponId	Range	TurnSpeed	Cost	NextLevelId
-#	int		int	int	int	float	float	int	int
-#	配置编号	备注	等级	实体编号	武器编号	射程	转速	进入该级费用	下一等级编号
-	1001	单体一级	1	50001	301	12	180	100	1002
-	1002	单体二级	2	50001	302	15	210	150	0
-	2001	范围一级	1	50002	401	10	150	150	2002
-	2002	范围二级	2	50002	402	12	180	200	0
+#	Id		Level	EntityId	WeaponId	Range	TurnSpeed	NextLevelId
+#	int		int	int	int	float	float	int
+#	配置编号	备注	等级	实体编号	武器编号	射程	转速	下一等级编号
+	1001	单体一级	1	50001	301	12	180	1002
+	1002	单体二级	2	50001	302	15	210	0
+	2001	范围一级	1	50002	401	10	150	2002
+	2002	范围二级	2	50002	402	12	180	0

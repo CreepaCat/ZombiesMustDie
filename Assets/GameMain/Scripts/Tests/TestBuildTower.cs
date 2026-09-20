@@ -2,27 +2,24 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using ZombiesMustDie;
 
+/// <summary>使用塔类型编号验证核心建造入口。</summary>
 public class TestBuildTower : MonoBehaviour
 {
-    [SerializeField] TowerBuildPoint buildPoint;
-    [SerializeField] TowerService towerService;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private TowerBuildPoint buildPoint;
+    [SerializeField] private TowerService towerService;
+    [SerializeField] private int towerId = 1;
+
+    private void Start() => Build();
+
+    private void Update()
     {
-        towerService.TryBuild(buildPoint, 50001);
+        if (Keyboard.current != null && Keyboard.current.bKey.wasPressedThisFrame) Build();
     }
 
-    void Update()
+    private void Build()
     {
-        if (Keyboard.current.bKey.wasPressedThisFrame)
-        {
-            if (!towerService.TryBuild(buildPoint, 50001))
-            {
-                Debug.LogError("建造塔失败");
-            }
-        }
+        if (towerService == null || buildPoint == null) return;
+        if (!towerService.TryBuild(buildPoint, towerId))
+            Debug.LogWarning(towerService.LastError, this);
     }
-
-
-
 }

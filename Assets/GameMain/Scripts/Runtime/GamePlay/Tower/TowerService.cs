@@ -6,12 +6,10 @@ using UnityGameFramework.Runtime;
 
 namespace ZombiesMustDie
 {
-    /// <summary>关卡级交易协调器。待加载实体与旧塔并存，验证成功后才提交替换。</summary>
+    /// <summary>关卡级防御塔服务。统一管理建造、升级、加载回滚和实体清理。</summary>
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(PlayerWallet))]
     public sealed class TowerService : MonoBehaviour
     {
-        [SerializeField] private PlayerWallet wallet;
         [SerializeField] private string towerGroup = "Tower";
         [SerializeField] private string weaponGroup = "Weapon";
         [SerializeField] private string bulletGroup = "Bullet";
@@ -25,7 +23,6 @@ namespace ZombiesMustDie
         private bool closing;
         private bool executing;
         private float nextHealthCheck;
-        public PlayerWallet Wallet => wallet;
         public string LastError { get; private set; }
         public event Action Changed;
 
@@ -34,7 +31,6 @@ namespace ZombiesMustDie
             public TowerBuildPoint Point;
             public TowerEntity Tower;
             public int WeaponId;
-            public readonly List<Guid> Payments = new List<Guid>();
             public Pending Pending;
         }
 
@@ -51,7 +47,6 @@ namespace ZombiesMustDie
             public float CooldownDeadline;
         }
 
-        private void Awake() { if (wallet == null) wallet = GetComponent<PlayerWallet>(); }
         private void OnEnable() { closing = false; services.Add(this); }
 
         public bool TryBuild(TowerBuildPoint point, int towerId)
@@ -85,69 +80,45 @@ namespace ZombiesMustDie
             var operation = Guid.NewGuid();
             slot.Point.OperationId = operation;
             slot.Point.State = slot.Tower == null ? TowerOperationState.Building : TowerOperationState.Upgrading;
-            var old = slot.Tower != null ? slot.Tower.Data : null;
             var pending = new Pending
             {
                 Slot = slot, Operation = operation, Config = weapon,
-                Data = new TowerEntityData(NewEntityId(), towerId, level, slot.Point, this, operation,
-                    old != null ? old.InitialPaid : level.Cost, (old?.UpgradePaid ?? 0) + (old != null ? level.Cost : 0)),
+                Data = new TowerEntityData(NewEntityId(), towerId, level, slot.Point, this, operation),
                 Deadline = Time.realtimeSinceStartup + Mathf.Max(1f, loadTimeout),
                 CooldownDeadline = Time.time + ((slot.Tower?.Combat.CurrentWeapon as WeaponEntity)?.CooldownRemaining ?? 0f)
             };
             slot.Pending = pending;
-            bool paid = false;
+            bool requested = false;
             try
             {
-                paid = wallet.TrySpend(operation, level.Cost);
-                if (!paid) { Rollback(pending, "金币不足。", false); return false; }
-                // 钱包监听器可能在通知中卸载关卡，此时不再提交加载。
-                if (closing || slot.Pending != pending) { wallet.Refund(operation); return false; }
                 if (slot.Tower != null) slot.Tower.SetWorking(false);
                 Subscribe();
                 loads.Add(pending.Data.Id, pending);
                 DREntity entity = GameEntry.DataTable.GetDataTable<DREntity>().GetDataRow(level.EntityId);
                 GameEntry.Entity.ShowEntity<TowerEntity>(pending.Data.Id,
                     AssetUtility.GetEntityAsset(entity.AssetName), towerGroup, pending.Data);
+                requested = true;
                 LastError = null;
-                Notify();
-                return true;
             }
-            catch (Exception e) { Rollback(pending, e.Message, paid); return false; }
-            finally { executing = false; }
-        }
-
-        public bool TryDemolish(TowerBuildPoint point)
-        {
-            if (!Ready(point) || !slots.TryGetValue(point, out Slot slot) || slot.Pending != null ||
-                slot.Tower == null || point.State != TowerOperationState.Working) return Fail("防御塔正忙或不存在。");
-            executing = true;
-            point.OperationId = Guid.NewGuid();
-            point.State = TowerOperationState.Demolishing;
-            try
+            finally
             {
-                // 先从服务移除，Hide 回调和余额通知均不能重复进入此交易。
-                slots.Remove(point);
-                slot.Tower.SetWorking(false);
-                Hide(slot.WeaponId);
-                Hide(slot.Tower.Id);
-                foreach (Guid payment in slot.Payments) wallet.Refund(payment);
-                ResetPoint(point);
-                LastError = null;
-                Notify();
-                return true;
+                // 同步加载异常也要释放操作锁，异步失败由事件处理。
+                executing = false;
+                if (!requested) Rollback(pending, "塔实体加载请求失败。");
             }
-            finally { executing = false; }
+            Notify();
+            return true;
         }
 
         private bool Ready(TowerBuildPoint point) => !closing && !executing && isActiveAndEnabled &&
-            wallet != null && point != null && point.isActiveAndEnabled && GameEntry.Entity != null &&
+            point != null && point.isActiveAndEnabled && GameEntry.Entity != null &&
             GameEntry.Event != null && GameEntry.DataTable != null;
 
         private bool Validate(DRTowerLevel level, out DRWeapon weapon)
         {
             weapon = GameEntry.DataTable.GetDataTable<DRWeapon>()?.GetDataRow(level.WeaponId);
             var entities = GameEntry.DataTable.GetDataTable<DREntity>();
-            if (level.Cost < 0 || !Positive(level.Range) || !Positive(level.TurnSpeed) ||
+            if (!Positive(level.Range) || !Positive(level.TurnSpeed) ||
                 weapon == null || weapon.Attack <= 0 || !Positive(weapon.FireInterval) ||
                 weapon.AreaRadius < 0 || float.IsNaN(weapon.AreaRadius) || float.IsInfinity(weapon.AreaRadius) ||
                 string.IsNullOrEmpty(entities?.GetDataRow(level.EntityId)?.AssetName) ||
@@ -178,39 +149,44 @@ namespace ZombiesMustDie
             if (!ReferenceEquals(e.UserData, towerResult ? (object)p.Data : p.WeaponData)) return;
             if (!Current(p)) { Rollback(p, "建造操作已取消。"); return; }
             executing = true;
+            bool completed = false;
             try
             {
                 if (towerResult)
                 {
                     loads.Remove(p.Data.Id);
                     p.Tower = e.Entity.Logic as TowerEntity;
-                    if (p.Tower == null || p.Tower.Data != p.Data) throw new InvalidOperationException("塔实体初始化失败。");
+                    if (p.Tower == null || p.Tower.Data != p.Data) return;
                     p.WeaponId = NewEntityId();
-                    // 未提交前不装备，避免影响旧塔或在加载回调之前攻击。
+                    // 未提交前不装备，避免影响旧塔或提前攻击。
                     p.WeaponData = p.Config.AreaRadius > 0f
                         ? new WeaponEntityData(p.WeaponId, p.Config.EntityId, p.Config.Id, null, p.Config)
                         : new ProjectileWeaponEntityData(p.WeaponId, p.Config.EntityId, p.Config.Id, null,
                             muzzlePath, bulletGroup, Mathf.Max(5f, p.Data.Level.Range / p.Config.BulletSpeed + 1f), weaponConfig: p.Config);
                     loads.Add(p.WeaponId, p);
-                    var config = GameEntry.DataTable.GetDataTable<DREntity>().GetDataRow(p.Config.EntityId);
+                    var config = GameEntry.DataTable.GetDataTable<DREntity>()?.GetDataRow(p.Config.EntityId);
+                    if (config == null || string.IsNullOrEmpty(config.AssetName)) return;
                     GameEntry.Entity.ShowEntity(p.WeaponId, p.Config.AreaRadius > 0f ? typeof(AreaWeaponEntity) : typeof(ProjectileWeaponEntity),
                         AssetUtility.GetEntityAsset(config.AssetName), weaponGroup, p.WeaponData);
                 }
                 else
                 {
                     var weapon = e.Entity.Logic as WeaponEntity;
-                    if (weapon == null || weapon.WeaponData != p.Config || p.Tower == null || !p.Tower.Available)
-                        throw new InvalidOperationException("武器初始化失败。");
+                    if (weapon == null || weapon.WeaponData != p.Config || p.Tower == null || !p.Tower.Available) return;
                     GameEntry.Entity.AttachEntity(e.Entity, p.Tower.Entity, p.Tower.TowerCombat.WeaponMount);
                     e.Entity.transform.localPosition = Vector3.zero;
                     e.Entity.transform.localRotation = Quaternion.identity;
                     weapon.ConfigureTowerWeapon(p.CooldownDeadline);
-                    if (!p.Tower.Combat.EquipWeapon(weapon)) throw new InvalidOperationException("装备武器失败。");
+                    if (!p.Tower.Combat.EquipWeapon(weapon)) return;
                     Commit(p);
                 }
+                completed = true;
             }
-            catch (Exception ex) { Rollback(p, ex.Message); }
-            finally { executing = false; }
+            finally
+            {
+                executing = false;
+                if (!completed) Rollback(p, "塔或武器初始化失败。");
+            }
         }
 
         private bool Current(Pending p) => !closing && p.Slot.Point != null && p.Slot.Point.isActiveAndEnabled &&
@@ -226,7 +202,6 @@ namespace ZombiesMustDie
             slot.Pending = null;
             slot.Tower = p.Tower;
             slot.WeaponId = p.WeaponId;
-            slot.Payments.Add(p.Operation);
             slot.Point.Tower = p.Tower;
             slot.Point.State = TowerOperationState.Working;
             Hide(previousWeapon);
@@ -244,7 +219,7 @@ namespace ZombiesMustDie
                 Rollback(p, e.ErrorMessage);
         }
 
-        private void Rollback(Pending p, string reason, bool refund = true, int alreadyHiding = 0)
+        private void Rollback(Pending p, string reason, int alreadyHiding = 0)
         {
             if (p.Slot.Pending != p) return;
             p.Slot.Pending = null;
@@ -252,8 +227,6 @@ namespace ZombiesMustDie
             loads.Remove(p.WeaponId);
             Hide(p.WeaponId);
             if (p.Data.Id != alreadyHiding) Hide(p.Data.Id);
-            // 保持点位锁直到退款通知结束，避免可重入建造。
-            if (refund && wallet != null) wallet.Refund(p.Operation);
             if (!slots.TryGetValue(p.Slot.Point, out Slot registered) || registered != p.Slot)
             {
                 LastError = reason;
@@ -278,7 +251,7 @@ namespace ZombiesMustDie
         {
             if (data.BuildPoint == null || !slots.TryGetValue(data.BuildPoint, out Slot slot)) return;
             if (slot.Tower == tower) ReleasePoint(data.BuildPoint, tower.Id);
-            else if (slot.Pending != null && slot.Pending.Data == data) Rollback(slot.Pending, "加载中的塔被回收。", true, tower.Id);
+            else if (slot.Pending != null && slot.Pending.Data == data) Rollback(slot.Pending, "加载中的塔被回收。", tower.Id);
         }
 
         public void ReleasePoint(TowerBuildPoint point) => ReleasePoint(point, 0);
@@ -296,11 +269,9 @@ namespace ZombiesMustDie
                 loads.Remove(pending.WeaponId);
                 Hide(pending.WeaponId);
                 if (pending.Data.Id != alreadyHiding) Hide(pending.Data.Id);
-                if (wallet != null) wallet.Refund(pending.Operation);
             }
             Hide(slot.WeaponId);
             if (slot.Tower != null && slot.Tower.Id != alreadyHiding) Hide(slot.Tower.Id);
-            if (wallet != null) foreach (Guid payment in slot.Payments) wallet.ForgetPayment(payment);
             ResetPoint(point);
             Notify();
         }
@@ -323,7 +294,7 @@ namespace ZombiesMustDie
             foreach (var slot in new List<Slot>(slots.Values))
             {
                 if (slot.Pending != null && Time.realtimeSinceStartup >= slot.Pending.Deadline)
-                    Rollback(slot.Pending, "实体加载超时，已退回本次费用。");
+                    Rollback(slot.Pending, "实体加载超时，已恢复建造点状态。");
                 else if (slot.Tower != null && slot.Pending == null &&
                     (slot.Tower.Combat.CurrentWeapon == null || !GameEntry.Entity.HasEntity(slot.WeaponId)))
                     ReleasePoint(slot.Point);
@@ -353,9 +324,12 @@ namespace ZombiesMustDie
 
         private static int NewEntityId()
         {
-            do { if (nextEntityId == int.MinValue) nextEntityId = 0; --nextEntityId; }
-            while (GameEntry.Entity.HasEntity(nextEntityId) || GameEntry.Entity.IsLoadingEntity(nextEntityId));
-            return nextEntityId;
+            while (true)
+            {
+                nextEntityId = nextEntityId == int.MinValue ? -1 : nextEntityId - 1;
+                if (!GameEntry.Entity.HasEntity(nextEntityId) && !GameEntry.Entity.IsLoadingEntity(nextEntityId))
+                    return nextEntityId;
+            }
         }
 
         private static void Hide(int id)
@@ -367,9 +341,7 @@ namespace ZombiesMustDie
         private bool Fail(string reason) { LastError = reason; return false; }
         private void Notify()
         {
-            if (Changed == null) return;
-            foreach (Action listener in Changed.GetInvocationList())
-                try { listener(); } catch (Exception e) { Debug.LogException(e); }
+            Changed?.Invoke();
         }
     }
 }

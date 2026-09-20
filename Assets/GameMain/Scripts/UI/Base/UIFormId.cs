@@ -33,6 +33,5 @@ namespace ZombiesMustDie
         /// 选择角色。
         /// </summary>
         SelectCharacterForm = 103,
-        TowerManageForm = 104,
     }
 }

@@ -15,7 +15,6 @@ namespace ZombiesMustDie
         public int WeaponId { get; private set; }
         public float Range { get; private set; }
         public float TurnSpeed { get; private set; }
-        public int Cost { get; private set; }
         public int NextLevelId { get; private set; }
         public override bool ParseDataRow(string dataRowString, object userData)
         {
@@ -27,8 +26,7 @@ namespace ZombiesMustDie
             WeaponId = int.Parse(c[5]);
             Range = float.Parse(c[6], CultureInfo.InvariantCulture);
             TurnSpeed = float.Parse(c[7], CultureInfo.InvariantCulture);
-            Cost = int.Parse(c[8]);
-            NextLevelId = int.Parse(c[9]);
+            NextLevelId = int.Parse(c[8]);
             return true;
         }
         public override bool ParseDataRow(byte[] bytes, int startIndex, int length, object userData)
@@ -42,7 +40,6 @@ namespace ZombiesMustDie
                 WeaponId = reader.Read7BitEncodedInt32();
                 Range = reader.ReadSingle();
                 TurnSpeed = reader.ReadSingle();
-                Cost = reader.Read7BitEncodedInt32();
                 NextLevelId = reader.Read7BitEncodedInt32();
             }
             return true;
