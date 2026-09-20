@@ -14,6 +14,7 @@ namespace ZombiesMustDie
         [SerializeField] private string weaponGroup = "Weapon";
         [SerializeField] private string bulletGroup = "Bullet";
         [SerializeField] private string muzzlePath = "Muzzle";
+        [Tooltip("实体资源加载的超时保护，不是建造时长。资源就绪后立即工作。")]
         [SerializeField, Min(1f)] private float loadTimeout = 20f;
         private static readonly HashSet<TowerService> services = new HashSet<TowerService>();
         private static int nextEntityId;
@@ -37,7 +38,6 @@ namespace ZombiesMustDie
         private sealed class Pending
         {
             public Slot Slot;
-            public Guid Operation;
             public TowerEntityData Data;
             public WeaponEntityData WeaponData;
             public DRWeapon Config;
@@ -60,7 +60,8 @@ namespace ZombiesMustDie
             var slot = new Slot { Point = point };
             slots.Add(point, slot);
             point.Service = this;
-            return Begin(slot, towerId, level, weapon);
+            RequestTowerLoad(slot, towerId, level, weapon);
+            return true;
         }
 
         public bool TryUpgrade(TowerBuildPoint point)
@@ -71,10 +72,12 @@ namespace ZombiesMustDie
             DRTowerLevel next = GameEntry.DataTable.GetDataTable<DRTowerLevel>()?.GetDataRow(previous.Level.NextLevelId);
             if (next == null || next.Level != previous.Level.Level + 1) return Fail("已满级或下一等级配置无效。");
             if (!Validate(next, out DRWeapon weapon)) return false;
-            return Begin(slot, previous.TowerId, next, weapon);
+            RequestTowerLoad(slot, previous.TowerId, next, weapon);
+            return true;
         }
 
-        private bool Begin(Slot slot, int towerId, DRTowerLevel level, DRWeapon weapon)
+        /// <summary>建造和升级共用的加载入口；资源就绪后立即启用防御塔，不设置建造时长。</summary>
+        private void RequestTowerLoad(Slot slot, int towerId, DRTowerLevel level, DRWeapon weapon)
         {
             executing = true;
             var operation = Guid.NewGuid();
@@ -82,7 +85,7 @@ namespace ZombiesMustDie
             slot.Point.State = slot.Tower == null ? TowerOperationState.Building : TowerOperationState.Upgrading;
             var pending = new Pending
             {
-                Slot = slot, Operation = operation, Config = weapon,
+                Slot = slot, Config = weapon,
                 Data = new TowerEntityData(NewEntityId(), towerId, level, slot.Point, this, operation),
                 Deadline = Time.realtimeSinceStartup + Mathf.Max(1f, loadTimeout),
                 CooldownDeadline = Time.time + ((slot.Tower?.Combat.CurrentWeapon as WeaponEntity)?.CooldownRemaining ?? 0f)
@@ -107,7 +110,6 @@ namespace ZombiesMustDie
                 if (!requested) Rollback(pending, "塔实体加载请求失败。");
             }
             Notify();
-            return true;
         }
 
         private bool Ready(TowerBuildPoint point) => !closing && !executing && isActiveAndEnabled &&
@@ -190,7 +192,7 @@ namespace ZombiesMustDie
         }
 
         private bool Current(Pending p) => !closing && p.Slot.Point != null && p.Slot.Point.isActiveAndEnabled &&
-            p.Slot.Pending == p && p.Slot.Point.OperationId == p.Operation;
+            p.Slot.Pending == p && p.Slot.Point.OperationId == p.Data.OperationId;
 
         private void Commit(Pending p)
         {
@@ -289,7 +291,7 @@ namespace ZombiesMustDie
 
         private void Update()
         {
-            if (Time.realtimeSinceStartup < nextHealthCheck) return;
+            if (slots.Count == 0 || Time.realtimeSinceStartup < nextHealthCheck) return;
             nextHealthCheck = Time.realtimeSinceStartup + 0.2f;
             foreach (var slot in new List<Slot>(slots.Values))
             {
