@@ -21,6 +21,7 @@ namespace ZombiesMustDie
         public override void Interact()
         {
             if (CanInteract) onBuildSelectionRequested.Invoke(this);
+            //todo:如果没有塔，则建造，如果有塔，显示UI操作界面，选择升级 或 拆除 塔
         }
 
         private ParticleSystem[] particles; //建造点粒子特效

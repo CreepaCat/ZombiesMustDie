@@ -187,7 +187,9 @@ namespace ZombiesMustDie
             p.WeaponData = p.Config.AreaRadius > 0f
                 ? new WeaponEntityData(p.WeaponId, p.Config.EntityId, p.Config.Id, null, p.Config)
                 : new ProjectileWeaponEntityData(p.WeaponId, p.Config.EntityId, p.Config.Id, null,
-                    muzzlePath, bulletGroup, Mathf.Max(5f, p.Data.Level.Range / p.Config.BulletSpeed + 1f), weaponConfig: p.Config);
+                    muzzlePath, bulletGroup, Mathf.Max(5f, p.Data.Level.Range / p.Config.BulletSpeed + 1f),
+                    bulletHitLayerMask: p.Tower.TowerCombat.BulletHitLayer, weaponConfig: p.Config);
+
             loads.Add(p.WeaponId, p);
             GameEntry.Entity.ShowEntity(p.WeaponId, p.Config.AreaRadius > 0f ? typeof(AreaWeaponEntity) : typeof(ProjectileWeaponEntity),
                 AssetUtility.GetEntityAsset(config.AssetName), weaponGroup, p.WeaponData);

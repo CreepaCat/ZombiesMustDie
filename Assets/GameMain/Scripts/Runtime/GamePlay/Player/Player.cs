@@ -8,24 +8,21 @@ namespace ZombiesMustDie
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(PlayerAnimation))]
     [RequireComponent(typeof(CombatController), typeof(PlayerCombat))]
+    [RequireComponent(typeof(PlayerInteraction))]
     public class Player : MonoBehaviour
     {
         [SerializeField] InputReader input;
         private static Player m_Instance = null;
-
-        private PlayerAnimation m_Animation;
-        private CharacterController m_Controller;
         private Health m_Health;
-        public CombatController Combat { get; private set; }
-        public PlayerCombat PlayerCombat { get; private set; }
-
 
         //Getters
         public InputReader Input => input;
+        public PlayerAnimation Animation { get; private set; }
 
-        public PlayerAnimation Animation => m_Animation;
-
-        public CharacterController Controller => m_Controller;
+        public CharacterController Controller { get; private set; }
+        public CombatController Combat { get; private set; }
+        public PlayerCombat PlayerCombat { get; private set; }
+        public PlayerInteraction Interaction { get; private set; }
 
         public bool IsDead => m_Health.IsDead;
 
@@ -41,12 +38,13 @@ namespace ZombiesMustDie
         void Awake()
         {
             m_Instance = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-            m_Animation = GetComponent<PlayerAnimation>();
-            m_Controller = GetComponent<CharacterController>();
+            Animation = GetComponent<PlayerAnimation>();
+            Controller = GetComponent<CharacterController>();
             m_Health = GetComponent<Health>();
             Combat = GetComponent<CombatController>();
             PlayerCombat = GetComponent<PlayerCombat>();
-            if (m_Animation == null)
+            Interaction = GetComponent<PlayerInteraction>();
+            if (Animation == null)
             {
                 Debug.LogError("Player Animator is null");
             }
@@ -64,7 +62,7 @@ namespace ZombiesMustDie
 
         private void OnDie()
         {
-            m_Animation.PlayTargetAnimation(PlayerAnimationParamConfig.Clip_Death, true);
+            Animation.PlayTargetAnimation(PlayerAnimationParamConfig.Clip_Death, true);
         }
 
 

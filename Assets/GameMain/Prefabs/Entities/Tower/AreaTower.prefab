@@ -218,6 +218,9 @@ MonoBehaviour:
   obstructionLayers:
     serializedVersion: 2
     m_Bits: 1
+  hitLayer:
+    serializedVersion: 2
+    m_Bits: 257
 --- !u!114 &1489904003047631687
 MonoBehaviour:
   m_ObjectHideFlags: 0

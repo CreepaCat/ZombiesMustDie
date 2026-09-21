@@ -9,10 +9,12 @@ namespace ZombiesMustDie
         [SerializeField] private Transform sightOrigin;
         [SerializeField, Range(0f, 180f)] private float aimTolerance = 5f;
         [SerializeField] private LayerMask obstructionLayers = ~0;
+        [SerializeField] private LayerMask bulletHitLayer = ~0; //子弹或攻击可命中的layer
         private TowerEntity tower;
         private TowerTargetDetector detector;
         private DRTowerLevel level;
         public Transform WeaponMount => turret != null ? turret : transform;
+        public LayerMask BulletHitLayer => bulletHitLayer;
 
         internal void Configure(TowerEntity owner, DRTowerLevel config)
         {

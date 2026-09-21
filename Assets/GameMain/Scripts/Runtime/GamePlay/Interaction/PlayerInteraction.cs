@@ -77,6 +77,7 @@ namespace ZombiesMustDie
             if (currentTarget != null) currentTarget.SetHighlighted(false);
             currentTarget = target;
             if (currentTarget != null) currentTarget.SetHighlighted(true);
+            Debug.Log("PlayerInteraction SetTarget " + currentTarget);
             TargetChanged?.Invoke(currentTarget);
         }
 

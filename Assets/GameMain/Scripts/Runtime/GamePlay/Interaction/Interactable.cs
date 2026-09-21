@@ -8,7 +8,7 @@ namespace ZombiesMustDie
     {
         [SerializeField] private RenderingLayerMask highlightLayer;
         private Renderer[] renderers;
-        private readonly int interactableLayer = LayerMask.NameToLayer("Interactable");
+        private int interactableLayer;
 
         public abstract bool CanInteract { get; }
         public abstract string Prompt { get; }
@@ -16,6 +16,7 @@ namespace ZombiesMustDie
 
         protected virtual void Awake()
         {
+            interactableLayer = LayerMask.NameToLayer("Interactable");
             renderers = GetComponentsInChildren<Renderer>(true);
             gameObject.layer = interactableLayer;
         }
