@@ -5,7 +5,7 @@ namespace ZombiesMustDie
     public class Enemy_Idle : EnemyStateBase
     {
         //todo:转换条件
-        public Enemy_Idle(Enemy enemy) : base(enemy)
+        public Enemy_Idle(EnemyEntity enemy) : base(enemy)
         {
 
         }

@@ -16,6 +16,7 @@ namespace ZombiesMustDie
         [SerializeField] private int enemyTypeId = 10101;
         [SerializeField, Min(1)] private int enemiesPerWave = 5;
         [SerializeField, Min(0f)] private float spawnInterval = 1f;
+        [SerializeField] Transform spawnPoint = null;
 
         private static int nextEntityId = -1000000;
         private readonly Dictionary<int, EnemyEntityData> pending = new Dictionary<int, EnemyEntityData>();
@@ -63,6 +64,7 @@ namespace ZombiesMustDie
 
         private void StartWave(int wave)
         {
+            Debug.Log("波次开始，当前波数：" + wave);
             remainingToSpawn = Mathf.Max(1, enemiesPerWave);
             spawnTimer = 0f;
         }
@@ -76,7 +78,7 @@ namespace ZombiesMustDie
             for (int i = enemies.Count - 1; i >= 0; i--)
             {
                 EnemyEntity enemy = enemies[i];
-                if (enemy != null && enemy.Available && !enemy.IsDead) continue;
+                if (enemy != null && enemy.Available && !enemy.CanBeRecycle) continue;
                 enemies.RemoveAt(i);
                 if (enemy != null && enemy.Available)
                     GameEntry.Entity.HideEntity(enemy.Entity);
@@ -106,7 +108,7 @@ namespace ZombiesMustDie
                 levelController.FailLevel();
                 return;
             }
-            if (!NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 2f, NavMesh.AllAreas))
+            if (!NavMesh.SamplePosition(spawnPoint.position, out NavMeshHit hit, 2f, NavMesh.AllAreas))
             {
                 Log.Error("EnemySpawner 出生点附近没有可用导航网格。请将刷怪器放在已烘焙区域内。");
                 levelController.FailLevel();
@@ -114,7 +116,9 @@ namespace ZombiesMustDie
             }
 
             int id = GenerateEntityId();
-            var data = new EnemyEntityData(3.5f, 1000f, 0.5f, id, enemyTypeId)
+            DRCharacter crow = GameEntry.DataTable?.GetDataTable<DRCharacter>()?.GetDataRow(101);
+
+            var data = new EnemyEntityData(crow.MoveSpeed, 1000f, 0.5f, crow.MaxHP, id, enemyTypeId)
             {
                 Position = hit.position,
                 Rotation = transform.rotation

@@ -2,9 +2,10 @@
 #	int		string
 #	Id		AssetName
 #	实体编号	策划备注	资源名称
-	10001	角色/工程师	Character/Engineer
-	10002	角色/狙击手	Character/Sniper
-	10003	角色/突击步兵	Character/AssaultSoldier
+	10001	角色/玩家/工程师	Character/Player/Engineer
+	10002	角色/玩家/狙击手	Character/Player/Sniper
+	10003	角色/玩家/突击步兵	Character/Player/AssaultSoldier
+	10101	角色/敌人/男僵尸	Character/Enemy/TZ_M_Civ
 	20001	武器/扳手	Weapon/EngineerRifle
 	20002	武器/狙击步枪	Weapon/SniperRifle
 	20003	武器/突击步枪	Weapon/AssaultRifle

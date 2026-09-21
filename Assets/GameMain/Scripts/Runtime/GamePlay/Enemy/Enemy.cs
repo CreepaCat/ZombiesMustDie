@@ -59,27 +59,27 @@ namespace ZombiesMustDie
         {
             //初始化NavAgent设置
             m_Navigation.InitAgent(moveSpeed, rotationSpeed, stoppingDistance);
-            InitStateMachine();
+            // InitStateMachine();
 
         }
 
-        private void InitStateMachine()
-        {
-            m_StateMachine = new();
-            Enemy_Idle idle = new(this);
-            Enemy_MoveToFortress moveToFortress = new(this);
-            Enemy_ChasePlayer chasePlayer = new(this);
-            Enemy_Attack attack = new(this);
-            Enemy_Death death = new(this);
+        // private void InitStateMachine()
+        // {
+        //     m_StateMachine = new();
+        //     Enemy_Idle idle = new(this);
+        //     Enemy_MoveToFortress moveToFortress = new(this);
+        //     Enemy_ChasePlayer chasePlayer = new(this);
+        //     Enemy_Attack attack = new(this);
+        //     Enemy_Death death = new(this);
 
-            m_StateMachine.AddState(idle);
-            m_StateMachine.AddState(moveToFortress);
-            m_StateMachine.AddState(chasePlayer);
-            m_StateMachine.AddState(attack);
-            m_StateMachine.AddState(death);
+        //     m_StateMachine.AddState(idle);
+        //     m_StateMachine.AddState(moveToFortress);
+        //     m_StateMachine.AddState(chasePlayer);
+        //     m_StateMachine.AddState(attack);
+        //     m_StateMachine.AddState(death);
 
-            m_StateMachine.Init(idle.GetType());
-        }
+        //     m_StateMachine.Init(idle.GetType());
+        // }
 
         private void Update()
         {

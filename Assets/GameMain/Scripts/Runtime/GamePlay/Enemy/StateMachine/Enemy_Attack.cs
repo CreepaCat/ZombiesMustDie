@@ -11,7 +11,7 @@ namespace ZombiesMustDie
         float attackTimeout = 1f;
         float attackTimer;
 
-        public Enemy_Attack(Enemy enemy) : base(enemy)
+        public Enemy_Attack(EnemyEntity enemy) : base(enemy)
         {
         }
 

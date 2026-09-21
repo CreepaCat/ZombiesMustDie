@@ -4,9 +4,9 @@ namespace ZombiesMustDie
 {
     public abstract class EnemyStateBase : IState
     {
-        protected Enemy Enemy;
+        protected EnemyEntity Enemy;
         protected EnemyStateMachine StateMachine;
-        public EnemyStateBase(Enemy enemy)
+        public EnemyStateBase(EnemyEntity enemy)
         {
             Enemy = enemy;
             StateMachine = Enemy.StateMachine;

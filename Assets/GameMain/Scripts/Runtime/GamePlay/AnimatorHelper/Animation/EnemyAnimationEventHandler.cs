@@ -8,12 +8,12 @@ namespace ZombiesMustDie
     public class EnemyAnimationEventHandler : MonoBehaviour
     {
 
-        Enemy enemy;
+        EnemyEntity enemy;
         //敌人出生动画播放完毕后调用
 
-        void Awake()
+        void Start()
         {
-            enemy = GetComponentInParent<Enemy>();
+            enemy = GetComponentInParent<EnemyEntity>();
         }
         private void BornOver(AnimationEvent animationEvent)
         {

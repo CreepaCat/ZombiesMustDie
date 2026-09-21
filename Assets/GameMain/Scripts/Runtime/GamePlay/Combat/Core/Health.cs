@@ -52,6 +52,12 @@ namespace ZombiesMustDie
             HealthChanged?.Invoke(currentHealth, maxHealth);
         }
 
+        public void SetMaxHealth(int maxHp)
+        {
+            maxHealth = maxHp;
+            ResetHealth();
+        }
+
         private void OnValidate()
         {
             maxHealth = Mathf.Max(1f, maxHealth);

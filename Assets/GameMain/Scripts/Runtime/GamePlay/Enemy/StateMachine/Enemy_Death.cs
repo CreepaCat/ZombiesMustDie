@@ -4,7 +4,7 @@ namespace ZombiesMustDie
 {
     public class Enemy_Death : EnemyStateBase
     {
-        public Enemy_Death(Enemy enemy) : base(enemy)
+        public Enemy_Death(EnemyEntity enemy) : base(enemy)
         {
         }
         public override void OnEnter()

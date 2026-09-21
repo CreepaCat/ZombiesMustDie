@@ -1,4 +1,4 @@
-#	角色表						
+#	角色表
 #	角色编号	名称	角色实体编号	默认武器编号	最大生命值	移动速度	解锁需求金币
 #	int	string	int	int	int	float	int
 #	Id	Name	EntityId	DefaultWeaponId	MaxHP	MoveSpeed	UnlockMoney
@@ -6,5 +6,4 @@
 	1	Infantry	10003	3	120	5	0
 	2	Engineer	10001	1	150	4.5	100
 	3	Sniper	10002	2	90	4	200
-
-
+	101	TZ_M_Civ	10101	0	120	3	0

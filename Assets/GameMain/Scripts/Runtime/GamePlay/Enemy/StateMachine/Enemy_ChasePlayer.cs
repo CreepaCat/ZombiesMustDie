@@ -7,7 +7,7 @@ namespace ZombiesMustDie
     /// </summary>
     public class Enemy_ChasePlayer : EnemyStateBase
     {
-        public Enemy_ChasePlayer(Enemy enemy) : base(enemy)
+        public Enemy_ChasePlayer(EnemyEntity enemy) : base(enemy)
         {
         }
 

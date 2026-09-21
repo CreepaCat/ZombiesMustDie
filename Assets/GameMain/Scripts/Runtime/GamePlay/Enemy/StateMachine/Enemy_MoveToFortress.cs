@@ -7,7 +7,7 @@ namespace ZombiesMustDie
     /// </summary>
     public class Enemy_MoveToFortress : EnemyStateBase
     {
-        public Enemy_MoveToFortress(Enemy enemy) : base(enemy)
+        public Enemy_MoveToFortress(EnemyEntity enemy) : base(enemy)
         {
         }
 
