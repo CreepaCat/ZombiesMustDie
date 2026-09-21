@@ -7,13 +7,14 @@ using UnityGameFramework.Runtime;
 namespace ZombiesMustDie
 {
     /// <summary>
-    /// 在自身位置按间隔生成每波敌人，全部生成并清场后推进关卡。
+    /// 在spawnPoint位置按间隔生成每波敌人，全部生成并清场后推进关卡。
     /// </summary>
     [RequireComponent(typeof(LevelController))]
     [DisallowMultipleComponent]
     public sealed class EnemySpawner : MonoBehaviour
     {
         [SerializeField] private int enemyTypeId = 10101;
+        [SerializeField] private int characterId = 101;
         [SerializeField, Min(1)] private int enemiesPerWave = 5;
         [SerializeField, Min(0f)] private float spawnInterval = 1f;
         [SerializeField] Transform spawnPoint = null;
@@ -116,7 +117,7 @@ namespace ZombiesMustDie
             }
 
             int id = GenerateEntityId();
-            DRCharacter crow = GameEntry.DataTable?.GetDataTable<DRCharacter>()?.GetDataRow(101);
+            DRCharacter crow = GameEntry.DataTable?.GetDataTable<DRCharacter>()?.GetDataRow(characterId);
 
             var data = new EnemyEntityData(crow.MoveSpeed, 1000f, 0.5f, crow.MaxHP, id, enemyTypeId)
             {
@@ -164,11 +165,11 @@ namespace ZombiesMustDie
             }
 
             enemy.transform.rotation = data.Rotation;
-            enemy.GetComponent<Health>().ResetHealth();
-            Collider collider = enemy.GetComponent<Collider>();
-            if (collider != null) collider.enabled = true;
-            Animator animator = enemy.GetComponentInChildren<Animator>();
-            if (animator != null) animator.Rebind();
+            // enemy.GetComponent<Health>().ResetHealth();
+            // Collider collider = enemy.GetComponent<Collider>();
+            // if (collider != null) collider.enabled = true;
+            // Animator animator = enemy.GetComponentInChildren<Animator>();
+            // if (animator != null) animator.Rebind();
             enemies.Add(enemy);
         }
 

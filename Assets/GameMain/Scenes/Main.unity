@@ -87245,6 +87245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.EnemySpawner
   enemyTypeId: 10101
+  characterId: 101
   enemiesPerWave: 5
   spawnInterval: 1
   spawnPoint: {fileID: 186626387}
@@ -89878,6 +89879,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 17952246}
     m_Modifications:
+    - target: {fileID: 100000, guid: 7904510f0ad670d42b408f6a9c0500ac, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 7904510f0ad670d42b408f6a9c0500ac, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0

@@ -23,7 +23,7 @@ namespace ZombiesMustDie
         public bool IsDead => m_Health.IsDead;
         public bool IsInteracting => Animation.IsInteracting;
 
-        //回收入池
+        //死亡回收入池
         public bool CanBeRecycle { private set; get; }
 
         float recycleTimeout = 5f;
@@ -54,6 +54,7 @@ namespace ZombiesMustDie
             CanBeRecycle = false;
             startRecycle = false;
             recycleTimer = 0f;
+            ProcesseSpawn();
         }
 
         protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
@@ -128,14 +129,21 @@ namespace ZombiesMustDie
             StateMachine.ChangeState(typeof(Enemy_Death));
         }
 
+        //处理死亡
         internal void ProcesseDie()
         {
             Navigation.StopMoving();
-            GetComponent<Collider>().enabled = false;
+            GetComponent<Collider>().enabled = false; //死亡时关闭了Collider,相应的重生时要恢复
             Animation.PlayDeath();
+
+            //一段时间后，隐藏尸体
             startRecycle = true;
 
-            //todo:一段时间后，隐藏尸体
+        }
+
+        private void ProcesseSpawn()
+        {
+            GetComponent<Collider>().enabled = true;
         }
         #endregion
         #endregion
