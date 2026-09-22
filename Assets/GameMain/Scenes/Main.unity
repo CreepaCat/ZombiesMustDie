@@ -47448,6 +47448,14 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6400000, guid: d0520863589ce0c4c9fd502f6b393d81, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300000, guid: b138361295650294b89f74ce76472eb5, type: 3}
+    - target: {fileID: 6400000, guid: d0520863589ce0c4c9fd502f6b393d81, type: 3}
+      propertyPath: m_Convex
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -87230,7 +87238,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 637b19e53fb244f8bbc266cddc1cab49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.LevelController
-  totalWaves: 3
   preparationDuration: 5
 --- !u!114 &1842750646
 MonoBehaviour:
@@ -87244,10 +87251,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35a98cd9aae01a14f8cac2323f074977, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.EnemySpawner
-  enemyTypeId: 10101
-  characterId: 101
-  enemiesPerWave: 5
-  spawnInterval: 1
   spawnPoint: {fileID: 186626387}
 --- !u!4 &1843672622 stripped
 Transform:
@@ -102660,6 +102663,14 @@ PrefabInstance:
     - target: {fileID: 416822986854476275, guid: 9e60c90cb76ce694b8c7d0704dbf3294, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4159178767703932870, guid: 9e60c90cb76ce694b8c7d0704dbf3294, type: 3}
+      propertyPath: AvoidObstacles.CollisionFilter.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6648587236194828450, guid: 9e60c90cb76ce694b8c7d0704dbf3294, type: 3}
+      propertyPath: m_StepOffset
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 7690565378759937667, guid: 9e60c90cb76ce694b8c7d0704dbf3294, type: 3}
       propertyPath: m_Name
