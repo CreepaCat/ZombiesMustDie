@@ -3,6 +3,7 @@ using UnityGameFramework.Runtime;
 namespace ZombiesMustDie
 {
     [RequireComponent(typeof(EnemyAnimation))]
+    [RequireComponent(typeof(EnemyAnimationEventHandler))]
     [RequireComponent(typeof(EnemyNavigation))]
     [RequireComponent(typeof(EnemyTargetDetector))]
     [RequireComponent(typeof(CombatController))]
@@ -44,7 +45,6 @@ namespace ZombiesMustDie
             base.OnShow(userData);
             Data = userData as EnemyEntityData;
             if (Data == null) return;
-            //todo:放置到出生点
             m_Health.SetMaxHealth((int)Data.MaxHealth);
             m_Health.Died += OnDied;
 
@@ -96,6 +96,11 @@ namespace ZombiesMustDie
             StateMachine.AddState(death);
 
             StateMachine.Init(idle.GetType());
+        }
+
+        public void RecycleImmediately()
+        {
+            CanBeRecycle = true;
         }
 
         public Vector3 GetDirectionToPlayer()

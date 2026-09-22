@@ -50,6 +50,7 @@ namespace ZombiesMustDie
             if (lastTarget == null) return;
             if (!label.gameObject.activeSelf) label.gameObject.SetActive(true);
 
+            //固定显示在屏幕下方，暂不需要跟随玩家位置
             // Vector3 playerPos = playerInteraction.transform.position;
             // playerPos.y = 0;
 
@@ -66,7 +67,6 @@ namespace ZombiesMustDie
 
         private void OnTargetChanged(Interactable target)
         {
-            Debug.Log("Interaction OnTargetChanged");
             if (target == null) { Hide(); return; }
             if (lastTarget == null || !ReferenceEquals(lastTarget, target))
             {

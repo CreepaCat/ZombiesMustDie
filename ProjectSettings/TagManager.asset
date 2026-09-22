@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - HeadQuarter
+  - LevelManager
   layers:
   - Default
   - TransparentFX

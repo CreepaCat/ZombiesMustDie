@@ -23368,6 +23368,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 462901813}
+  - component: {fileID: 462901814}
   m_Layer: 5
   m_Name: HealthBar_HQ
   m_TagString: Untagged
@@ -23395,6 +23396,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 1}
+--- !u!114 &462901814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 462901812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b50af0e5a2e554489fd2af68cf83a6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ZombiesMustDie.HealthBar_HQ
+  bg: {fileID: 382276422}
+  fill: {fileID: 1146698779}
+  tmp_currHp: {fileID: 758354626}
+  tmp_maxHp: {fileID: 473841528}
 --- !u!4 &465273589 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 6ea9700a493b886468a5baee5b21c38c, type: 3}
@@ -57917,7 +57934,7 @@ RectTransform:
   m_Father: {fileID: 382276422}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: -0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 600, y: 0}
   m_Pivot: {x: 0, y: 0.5}
@@ -77338,7 +77355,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1594384258}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -77398,7 +77415,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 226.26, y: 31.57, z: 232.18}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 6, y: 6, z: 6}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -87188,7 +87205,7 @@ GameObject:
   - component: {fileID: 1842750646}
   m_Layer: 0
   m_Name: LevelManager
-  m_TagString: Untagged
+  m_TagString: LevelManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
