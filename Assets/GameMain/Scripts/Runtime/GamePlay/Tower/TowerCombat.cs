@@ -27,7 +27,7 @@ namespace ZombiesMustDie
         private void Update()
         {
             if (tower == null || !tower.IsWorking || level == null || Time.timeScale <= 0f) return;
-            CombatTarget target = detector.FindTarget(level.Range);
+            CombatTarget target = detector.FindTarget(level.Range, HasLineOfSight);
             if (target == null) return;
             Vector3 origin = sightOrigin != null ? sightOrigin.position : WeaponMount.position;
             Vector3 aim = target.transform.position;
@@ -48,6 +48,44 @@ namespace ZombiesMustDie
             }
             var request = new AttackRequest(aim, direction.normalized);
             tower.Combat.TryAttack(in request);
+        }
+
+        /// <summary>
+        /// 判断与目标之间是否被视野阻挡
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        private bool HasLineOfSight(CombatTarget target)
+        {
+            Vector3 origin = sightOrigin != null
+                ? sightOrigin.position
+                : WeaponMount.position;
+
+            Collider targetCollider = target.GetComponentInChildren<Collider>();
+            Vector3 aim = targetCollider != null
+                ? targetCollider.bounds.center
+                : target.transform.position;
+
+            Vector3 direction = aim - origin;
+            if (direction.sqrMagnitude < 0.000001f) return true;
+
+            foreach (RaycastHit hit in Physics.RaycastAll(
+                         origin,
+                         direction.normalized,
+                         direction.magnitude,
+                         obstructionLayers,
+                         QueryTriggerInteraction.Ignore))
+            {
+                if (hit.collider.transform.IsChildOf(transform) ||
+                    hit.collider.GetComponentInParent<CombatTarget>() == target)
+                {
+                    continue;
+                }
+
+                return false;
+            }
+
+            return true;
         }
     }
 }

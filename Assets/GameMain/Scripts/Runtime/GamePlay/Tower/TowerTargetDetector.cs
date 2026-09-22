@@ -12,9 +12,27 @@ namespace ZombiesMustDie
         private float nextSearch;
         public CombatTarget CurrentTarget { get; private set; }
 
-        public CombatTarget FindTarget(float range)
+        /// <summary>
+        /// 搜寻合格目标
+        /// </summary>
+        /// <param name="range">搜寻距离</param>
+        /// <param name="additionalValidator">额外的过滤条件</param>
+        /// <returns></returns>
+        public CombatTarget FindTarget(float range,
+        Predicate<CombatTarget> additionalValidator = null)
         {
-            if (IsValid(CurrentTarget, range)) return CurrentTarget;
+            if (IsValid(CurrentTarget, range))
+            {
+                if (additionalValidator == null ||
+            additionalValidator(CurrentTarget))
+                {
+                    return CurrentTarget;
+                }
+
+                // 当前目标被遮挡时，立即搜索其他目标。
+                nextSearch = 0f;
+            }
+            //return CurrentTarget;
             CurrentTarget = null;
             if (Time.time < nextSearch) return null;
             nextSearch = Time.time + Mathf.Max(0.02f, searchInterval);
@@ -25,7 +43,12 @@ namespace ZombiesMustDie
             for (int i = 0; i < count; i++)
             {
                 var target = hits[i].GetComponentInParent<CombatTarget>();
-                if (!IsValid(target, range)) continue;
+
+                if (!IsValid(target, range)
+                || additionalValidator != null
+                && !additionalValidator(target))
+                    continue;
+
                 float distance = (target.transform.position - transform.position).sqrMagnitude;
                 if (distance >= nearest) continue;
                 nearest = distance;
@@ -33,6 +56,8 @@ namespace ZombiesMustDie
             }
             return CurrentTarget;
         }
+
+
 
         private bool IsValid(CombatTarget target, float range) => target != null && target.isActiveAndEnabled &&
             !target.IsDead && target.Faction == CombatFaction.Enemy && target.IsTargetable &&
