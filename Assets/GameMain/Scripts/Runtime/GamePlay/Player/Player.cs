@@ -63,6 +63,8 @@ namespace ZombiesMustDie
         private void OnDie()
         {
             Animation.PlayTargetAnimation(PlayerAnimationParamConfig.Clip_Death, true);
+            //玩家死亡关卡失败
+            GameObject.FindWithTag("LevelManager").GetComponent<LevelController>().FailLevel();
         }
 
 
