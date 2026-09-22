@@ -26,6 +26,7 @@ namespace ZombiesMustDie
             // "Armor",
             // "Asteroid",
             "Entity",
+            "EnemyWave",
             "Music",
             "Scene",
             "Sound",

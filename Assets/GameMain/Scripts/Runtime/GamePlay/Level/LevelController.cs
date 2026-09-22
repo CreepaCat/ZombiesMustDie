@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityGameFramework.Runtime;
 
 namespace ZombiesMustDie
 {
@@ -21,12 +22,11 @@ namespace ZombiesMustDie
     [DisallowMultipleComponent]
     public sealed class LevelController : MonoBehaviour
     {
-        [SerializeField, Min(1)] private int totalWaves = 3;
         [SerializeField, Min(0f)] private float preparationDuration = 5f;
 
         public LevelState State { get; private set; }
         public int CurrentWave { get; private set; }
-        public int TotalWaves => totalWaves;
+        public int TotalWaves { get; private set; }
         public float PreparationRemaining { get; private set; }
 
         /// <summary>
@@ -74,6 +74,13 @@ namespace ZombiesMustDie
                 return;
             }
 
+            if (!LoadWaveConfiguration())
+            {
+                State = LevelState.Defeat;
+                LevelEnded?.Invoke(false);
+                return;
+            }
+
             CurrentWave = 1;
             PrepareWave();
         }
@@ -89,7 +96,7 @@ namespace ZombiesMustDie
                 return;
             }
 
-            if (CurrentWave >= totalWaves)
+            if (CurrentWave >= TotalWaves)
             {
                 State = LevelState.Victory;
                 LevelEnded?.Invoke(true);
@@ -115,6 +122,40 @@ namespace ZombiesMustDie
             LevelEnded?.Invoke(false);
         }
 
+        /// <summary>
+        /// 开局校验波次连续性、数量、间隔和角色实体引用，并从配置取得总波数。
+        /// </summary>
+        private bool LoadWaveConfiguration()
+        {
+            var table = GameEntry.DataTable?.GetDataTable<DREnemyWave>();
+            var characters = GameEntry.DataTable?.GetDataTable<DRCharacter>();
+            var entities = GameEntry.DataTable?.GetDataTable<DREntity>();
+            if (table == null || characters == null || entities == null || table.Count == 0)
+            {
+                Log.Error("关卡配置缺失：请预加载 EnemyWave、Character 和 Entity 表，且波次表不能为空。");
+                return false;
+            }
+
+            DREnemyWave[] rows = table.GetAllDataRows();
+            Array.Sort(rows, (a, b) => a.Wave.CompareTo(b.Wave));
+            int lastWave = 0;
+            foreach (DREnemyWave row in rows)
+            {
+                DRCharacter character = characters.GetDataRow(row.CharacterId);
+                DREntity entity = character != null ? entities.GetDataRow(character.EntityId) : null;
+                if (row.Wave < 1 || row.Wave > lastWave + 1 || row.Count <= 0 ||
+                    float.IsNaN(row.SpawnInterval) || float.IsInfinity(row.SpawnInterval) ||
+                    row.SpawnInterval < 0f || entity == null || string.IsNullOrEmpty(entity.AssetName))
+                {
+                    Log.Error("EnemyWave 配置行 {0} 无效：检查连续波次、数量、生成间隔和角色实体引用。", row.Id);
+                    return false;
+                }
+                lastWave = row.Wave;
+            }
+            TotalWaves = lastWave;
+            return true;
+        }
+
         private void PrepareWave()
         {
             State = LevelState.Preparing;
@@ -123,7 +164,6 @@ namespace ZombiesMustDie
 
         private void OnValidate()
         {
-            totalWaves = Mathf.Max(1, totalWaves);
             preparationDuration = Mathf.Max(0f, preparationDuration);
         }
     }

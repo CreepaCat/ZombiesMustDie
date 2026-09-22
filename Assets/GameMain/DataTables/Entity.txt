@@ -6,6 +6,7 @@
 	10002	角色/玩家/狙击手	Character/Player/Sniper
 	10003	角色/玩家/突击步兵	Character/Player/AssaultSoldier
 	10101	角色/敌人/男僵尸	Character/Enemy/TZ_M_Civ
+	10201	角色/敌人/女僵尸	Character/Enemy/TZ_FM_Civ
 	20001	武器/扳手	Weapon/EngineerRifle
 	20002	武器/狙击步枪	Weapon/SniperRifle
 	20003	武器/突击步枪	Weapon/AssaultRifle

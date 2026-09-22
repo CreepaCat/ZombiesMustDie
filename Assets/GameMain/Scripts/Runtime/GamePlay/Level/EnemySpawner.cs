@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GameFramework.Event;
 using UnityEngine;
@@ -13,16 +14,14 @@ namespace ZombiesMustDie
     [DisallowMultipleComponent]
     public sealed class EnemySpawner : MonoBehaviour
     {
-        [SerializeField] private int enemyTypeId = 10101;
-        [SerializeField] private int characterId = 101;
-        [SerializeField, Min(1)] private int enemiesPerWave = 5;
-        [SerializeField, Min(0f)] private float spawnInterval = 1f;
         [SerializeField] Transform spawnPoint = null;
 
         private static int nextEntityId = -1000000;
         private readonly Dictionary<int, EnemyEntityData> pending = new Dictionary<int, EnemyEntityData>();
         private readonly List<EnemyEntity> enemies = new List<EnemyEntity>();
         private LevelController levelController;
+        private DREnemyWave[] waveGroups;
+        private int groupIndex;
         private int remainingToSpawn;
         private float spawnTimer;
 
@@ -63,10 +62,23 @@ namespace ZombiesMustDie
             GameEntry.Event.Unsubscribe(ShowEntityFailureEventArgs.EventId, OnFailed);
         }
 
+        /// <summary>
+        /// 读取当前波的所有敌人组，按配置编号排序，第一组立即开始生成。
+        /// </summary>
         private void StartWave(int wave)
         {
-            Debug.Log("波次开始，当前波数：" + wave);
-            remainingToSpawn = Mathf.Max(1, enemiesPerWave);
+            var table = GameEntry.DataTable?.GetDataTable<DREnemyWave>();
+            waveGroups = table == null ? Array.Empty<DREnemyWave>() :
+                Array.FindAll(table.GetAllDataRows(), row => row.Wave == wave);
+            if (waveGroups.Length == 0 || spawnPoint == null)
+            {
+                Log.Error("无法开始第 {0} 波：波次配置或出生点缺失。", wave);
+                levelController.FailLevel();
+                return;
+            }
+            Array.Sort(waveGroups, (a, b) => a.Id.CompareTo(b.Id));
+            groupIndex = 0;
+            remainingToSpawn = waveGroups[0].Count;
             spawnTimer = 0f;
         }
 
@@ -89,23 +101,33 @@ namespace ZombiesMustDie
             if (remainingToSpawn > 0 && spawnTimer <= 0f)
             {
                 remainingToSpawn--;
-                spawnTimer = Mathf.Max(0f, spawnInterval);
-                SpawnEnemy();
+                SpawnEnemy(waveGroups[groupIndex].CharacterId);
+                if (levelController.State != LevelState.Fighting) return;
+                if (remainingToSpawn == 0)
+                {
+                    groupIndex++;
+                    if (groupIndex < waveGroups.Length)
+                        remainingToSpawn = waveGroups[groupIndex].Count;
+                }
+                if (groupIndex < waveGroups.Length)
+                    spawnTimer = waveGroups[groupIndex].SpawnInterval;
             }
-            if (remainingToSpawn == 0 && pending.Count == 0 && enemies.Count == 0)
+            if (groupIndex >= waveGroups.Length && pending.Count == 0 && enemies.Count == 0)
                 levelController.CompleteWave(levelController.CurrentWave);
         }
 
         /// <summary>
         /// 使用现有实体表与 Character 分组生成敌人，出生点必须位于导航网格附近。
         /// </summary>
-        private void SpawnEnemy()
+        private void SpawnEnemy(int characterId)
         {
-            DREntity row = GameEntry.DataTable?.GetDataTable<DREntity>()?.GetDataRow(enemyTypeId);
+            DRCharacter crow = GameEntry.DataTable?.GetDataTable<DRCharacter>()?.GetDataRow(characterId);
+            DREntity row = crow == null ? null :
+                GameEntry.DataTable?.GetDataTable<DREntity>()?.GetDataRow(crow.EntityId);
             if (row == null || string.IsNullOrEmpty(row.AssetName) ||
                 !GameEntry.Entity.HasEntityGroup("Character"))
             {
-                Log.Error("无法生成敌人 {0}：请检查 Entity 表与 Character 实体组。", enemyTypeId);
+                Log.Error("无法生成敌人 {0}：请检查 Entity 表与 Character 实体组。", characterId);
                 levelController.FailLevel();
                 return;
             }
@@ -117,9 +139,8 @@ namespace ZombiesMustDie
             }
 
             int id = GenerateEntityId();
-            DRCharacter crow = GameEntry.DataTable?.GetDataTable<DRCharacter>()?.GetDataRow(characterId);
 
-            var data = new EnemyEntityData(crow.MoveSpeed, 1000f, 0.5f, crow.MaxHP, id, enemyTypeId)
+            var data = new EnemyEntityData(crow.MoveSpeed, 1000f, 0.5f, crow.MaxHP, id, crow.EntityId)
             {
                 Position = hit.position,
                 Rotation = transform.rotation

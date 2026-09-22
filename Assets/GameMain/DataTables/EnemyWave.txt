@@ -1,0 +1,8 @@
+#	波次表				
+#	波次组编号	波次	生成角色id	生成数量	生成间隔时间
+#	int	int	int	int	float
+#	Id	Wave	CharacterId	Count	SpawnInterval
+	1	1	101	5	1.5
+	2	2	101	8	1
+	3	3	101	10	0.8
+	4	3	201	2	2
