@@ -32,9 +32,9 @@ namespace ZombiesMustDie
         {
             levelController = GetComponent<LevelController>();
             levelController.WaveStarted += StartWave;
-            levelController.LevelEnded += OnLevelEnded;
             if (GameEntry.Event != null)
             {
+                GameEntry.Event.Subscribe(LevelEndedEventArgs.EventId, OnLevelEnded);
                 GameEntry.Event.Subscribe(ShowEntitySuccessEventArgs.EventId, OnShown);
                 GameEntry.Event.Subscribe(ShowEntityFailureEventArgs.EventId, OnFailed);
             }
@@ -54,10 +54,10 @@ namespace ZombiesMustDie
         private void OnDisable()
         {
             levelController.WaveStarted -= StartWave;
-            levelController.LevelEnded -= OnLevelEnded;
             levelController.FailLevel();
             ClearEnemies();
             if (GameEntry.Event == null) return;
+            GameEntry.Event.Unsubscribe(LevelEndedEventArgs.EventId, OnLevelEnded);
             GameEntry.Event.Unsubscribe(ShowEntitySuccessEventArgs.EventId, OnShown);
             GameEntry.Event.Unsubscribe(ShowEntityFailureEventArgs.EventId, OnFailed);
         }
@@ -207,7 +207,7 @@ namespace ZombiesMustDie
             levelController.FailLevel();
         }
 
-        private void OnLevelEnded(bool victory)
+        private void OnLevelEnded(object sender, GameEventArgs args)
         {
             ClearEnemies();
         }

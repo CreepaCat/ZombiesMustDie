@@ -34,11 +34,6 @@ namespace ZombiesMustDie
         /// </summary>
         public event Action<int> WaveStarted;
 
-        /// <summary>
-        /// 本局结束时触发，参数表示是否获胜。
-        /// </summary>
-        public event Action<bool> LevelEnded;
-
         private void Start()
         {
             StartLevel();
@@ -77,7 +72,7 @@ namespace ZombiesMustDie
             if (!LoadWaveConfiguration())
             {
                 State = LevelState.Defeat;
-                LevelEnded?.Invoke(false);
+                GameEntry.Event.Fire(this, LevelEndedEventArgs.Create(false));
                 return;
             }
 
@@ -99,7 +94,7 @@ namespace ZombiesMustDie
             if (CurrentWave >= TotalWaves)
             {
                 State = LevelState.Victory;
-                LevelEnded?.Invoke(true);
+                GameEntry.Event.Fire(this, LevelEndedEventArgs.Create(true));
                 return;
             }
 
@@ -119,7 +114,7 @@ namespace ZombiesMustDie
 
             PreparationRemaining = 0f;
             State = LevelState.Defeat;
-            LevelEnded?.Invoke(false);
+            GameEntry.Event.Fire(this, LevelEndedEventArgs.Create(false));
         }
 
         /// <summary>
